@@ -1,0 +1,4 @@
+class main {
+            a:integer;
+            b:integer;
+        }
