@@ -1,1 +1,1 @@
-Program([ClassDecl(Id(main),[])])
+Program([ClassDecl(Id(loc),[])])

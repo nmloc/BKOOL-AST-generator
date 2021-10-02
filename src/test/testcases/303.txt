@@ -1,0 +1,4 @@
+class Loc {
+            int foo(int x,y,z; float y) {}
+            }
+        

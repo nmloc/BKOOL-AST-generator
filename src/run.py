@@ -9,7 +9,7 @@ import subprocess
 import unittest
 from antlr4 import *
 
-ANTLR_JAR = os.environ.get('ANTLR_JAR')
+ANTLR_JAR = './antlr-4.9.2-complete.jar'
 TARGET_DIR = '../target'
 GENERATE_DIR = '' if sys.platform.startswith('win') else 'main/bkool/parser'
 
