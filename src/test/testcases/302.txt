@@ -1,4 +1,4 @@
-class loc {
+class main {
             a:integer;
             b:integer;
         }

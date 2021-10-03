@@ -129,7 +129,9 @@ class ArrayLiteral(Literal):
 class Decl(AST):
     __metaclass__ = ABCMeta
     pass
-
+class StoreDecl(Decl):
+    __metaclass__ = ABCMeta
+    pass
 @dataclass
 class Assign(Stmt):
     lhs:Expr
@@ -179,7 +181,7 @@ class CallStmt(Stmt):
 
 # used for local variable or parameter declaration 
 @dataclass
-class VarDecl(Decl):
+class VarDecl(StoreDecl):
     variable : Id
     varType : Type
     varInit : Expr = None # None if there is no initial
@@ -190,7 +192,7 @@ class VarDecl(Decl):
 
 @dataclass
 class Block(Stmt):
-    decl:List[VarDecl]
+    decl:List[StoreDecl]
     stmt:List[Stmt]
     def __str__(self):
         return "Block([" + ','.join(str(i) for i in self.decl) + "],[" + ','.join(str(i) for i in self.stmt) + "])"
@@ -198,7 +200,7 @@ class Block(Stmt):
 
 # used for local constant declaration
 @dataclass
-class ConstDecl(Decl):
+class ConstDecl(StoreDecl):
     constant : Id
     constType : Type
     value : Expr
@@ -245,7 +247,7 @@ class MethodDecl(MemDecl):
 @dataclass
 class AttributeDecl(MemDecl):
     kind: SIKind #Instance or Static
-    decl: Decl # VarDecl for mutable or ConstDecl for immutable
+    decl: StoreDecl # VarDecl for mutable or ConstDecl for immutable
     def __str__(self):
         return "AttributeDecl(" + str(self.kind) + ',' + str(self.decl) + ")"
 

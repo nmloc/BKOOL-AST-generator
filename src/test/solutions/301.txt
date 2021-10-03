@@ -1,1 +1,1 @@
-Program([ClassDecl(Id(loc),[None,None,None,None])])
+Program([ClassDecl(Id(main),[AttributeDecl(Instance,VarDecl(Id(a),IntType))])])
