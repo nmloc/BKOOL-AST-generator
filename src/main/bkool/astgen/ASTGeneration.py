@@ -1,9 +1,7 @@
-from typing import List
 from BKOOLVisitor import BKOOLVisitor
 from BKOOLParser import BKOOLParser
 from AST import *
-from functools import reduce
-from main.bkool.utils.AST import ArrayCell, ArrayLiteral, ArrayType, Assign, AttributeDecl, BinaryOp, Block, BoolType, BooleanLiteral, Break, CallExpr, ClassDecl, ConstDecl, Continue, Expr, FieldAccess, FloatLiteral, FloatType, For, Id, If, Instance, IntLiteral, IntType, MethodDecl, NewExpr, Program, Return, SelfLiteral, Static, StringLiteral, StringType, Type, UnaryOp, VarDecl, VoidType
+from main.bkool.utils.AST import ArrayCell, ArrayLiteral, ArrayType, Assign, AttributeDecl, BinaryOp, Block, BoolType, BooleanLiteral, Break, CallExpr, CallStmt, ClassDecl, ConstDecl, Continue, Expr, FieldAccess, FloatLiteral, FloatType, For, Id, If, Instance, IntLiteral, IntType, MethodDecl, NewExpr, Program, Return, SelfLiteral, Static, StringLiteral, StringType, Type, UnaryOp, VarDecl, VoidType
 
 class ASTGeneration(BKOOLVisitor):
 
@@ -132,9 +130,8 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitConstructor(self, ctx:BKOOLParser.ConstructorContext):
         #constructor: className LB paraList? RB stmtBlock_wo_return;
-        kind = Static() if ctx.STATIC() else Instance()
         result = ""
-        result += str(MethodDecl(kind,
+        result += str(MethodDecl(Instance(),
                                 Id('"<init>"'),
                                 ctx.paraList().accept(self) if ctx.paraList() else [],
                                 None,
@@ -144,12 +141,11 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitMainMethod(self, ctx:BKOOLParser.MainMethodContext):
         #mainMethod: STATIC? VOID 'main' LB RB stmtBlock_wo_return;
-        kind = Static() if ctx.STATIC() else Instance()
         result = ""
-        result += str(MethodDecl(kind,
+        result += str(MethodDecl(Static(),
                                 Id('main'),
-                                ctx.paraList().accept(self) if ctx.paraList() else [],
-                                None,
+                                [],
+                                VoidType(),
                                 ctx.stmtBlock_wo_return().accept(self)))
         return result
 
@@ -276,7 +272,7 @@ class ASTGeneration(BKOOLVisitor):
     def visitExp3(self, ctx:BKOOLParser.Exp3Context):
         #exp3: exp3 (ADDOP | SUBOP) exp4 | exp4;
         if ctx.getChildCount() == 3:
-            return BinaryOp("AND" if ctx.AND() else "OR",
+            return BinaryOp("+" if ctx.ADDOP() else "-",
                             ctx.exp3().accept(self),
                             ctx.exp4().accept(self))
         else:
@@ -335,8 +331,7 @@ class ASTGeneration(BKOOLVisitor):
     def visitExp8(self, ctx:BKOOLParser.Exp8Context):
         #exp8: exp8 LSB exp8 RSB | exp9;
         if ctx.getChildCount() == 4:
-            return ArrayCell(ctx.exp8(0).accept(self),
-                        ctx.exp8(1).accept(self))  
+            return ArrayCell(ctx.exp8(0).accept(self), ctx.exp8(1).accept(self))  
         else:
             return ctx.exp9().accept(self)
 
@@ -345,11 +340,11 @@ class ASTGeneration(BKOOLVisitor):
         #exp9: exp9 DOT exp10 expListWithBrackets? | exp10;
         if ctx.getChildCount() == 4:
             return CallExpr(ctx.exp9().accept(self),
-                            Id( str(ctx.exp10().accept(self))),
-                                ctx.expListWithBrackets().accept(self))
+                            ctx.exp10().accept(self),
+                            ctx.expListWithBrackets().accept(self))
         elif ctx.getChildCount() == 3:
             return FieldAccess( ctx.exp9().accept(self),
-                                Id(str(ctx.exp10().accept(self))))
+                                ctx.exp10().accept(self))
         else:
             return ctx.exp10().accept(self)
 
@@ -357,8 +352,8 @@ class ASTGeneration(BKOOLVisitor):
     def visitExp10(self, ctx:BKOOLParser.Exp10Context):
         #exp10: NEW exp10 LB expList? RB | exp11;
         if ctx.getChildCount() == 4 or ctx.getChildCount() == 5:
-            return NewExpr(Id(str(ctx.exp10().accept(self))),
-                                ctx.expList().accept(self) if ctx.expList() else [])
+            return NewExpr( ctx.exp10().accept(self),
+                            ctx.expList().accept(self) if ctx.expList() else [])
         else:
             return ctx.exp11().accept(self)
 
@@ -384,7 +379,7 @@ class ASTGeneration(BKOOLVisitor):
         elif ctx.THIS():
             return SelfLiteral()
         elif ctx.ID():
-            return ctx.ID().getText()
+            return Id(ctx.ID().getText())
 
 
     def visitExpList(self, ctx:BKOOLParser.ExpListContext):
@@ -435,9 +430,12 @@ class ASTGeneration(BKOOLVisitor):
         elif ctx.getChildCount() == 4:
             return ArrayCell(Id(ctx.ID(0).getText()), ctx.exp().accept(self))
         else:
-            return FieldAccess( ArrayCell(Id(ctx.ID(0).getText()), 
-                                            ctx.exp(0).accept(self)) if ctx.exp() else Id(ctx.ID().getText()),
-                                Id(ctx.ID().getText()) if ctx.ID() else str(SelfLiteral()))
+            if ctx.getChildCount() == 3:
+                return FieldAccess( Id(ctx.getChild(1).getText()),
+                                    Id(ctx.getChild(0).getText()) if ctx.ID() else str(SelfLiteral()))
+            else:
+                return FieldAccess( ArrayCell(Id(ctx.getChild(2).getText()), ctx.exp().accept(self)),
+                                    Id(ctx.getChild(0).getText()) if ctx.ID() else str(SelfLiteral()))
             
 
 
@@ -475,7 +473,7 @@ class ASTGeneration(BKOOLVisitor):
     def visitMethod_invo(self, ctx:BKOOLParser.Method_invoContext):
         #method_invo: (ID|THIS) DOT exp expListWithBrackets? SEMI;
         if ctx.expListWithBrackets():
-            return CallExpr(ctx.exp().accept(self),
+            return CallStmt(ctx.exp().accept(self),
                             Id(ctx.ID().getText()) if ctx.ID() else str(SelfLiteral()),
                             ctx.expListWithBrackets().accept(self))
         else:
@@ -501,7 +499,6 @@ class ASTGeneration(BKOOLVisitor):
         elif ctx.arr_lit():
             return ArrayLiteral(ctx.arr_lit().accept(self))
         
-
 
     def visitBool_lit(self, ctx:BKOOLParser.Bool_litContext):
         #bool_lit: TRUE | FALSE;

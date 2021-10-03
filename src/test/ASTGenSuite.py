@@ -1,8 +1,19 @@
 import unittest
 from TestUtils import TestAST
 from AST import *
-
+import traceback
 class ASTGenSuite(unittest.TestCase):
+
+    # def test_(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,3))
+
+
+
+
+
+
     # def test_simple_program(self):
     #     """Simple program: class main {} """
     #     input = """class loc {}"""
@@ -69,5 +80,209 @@ class ASTGenSuite(unittest.TestCase):
                         b := this.suck;
                     }
             }"""
-        expect = "Program([ClassDecl(Id(a),Id(b),[AttributeDecl(Instance,ConstDecl(Id(c),IntType,BinaryOp(!=,daaaaaa,IntLit(5)))),AttributeDecl(Instance,VarDecl(Id(cacbu),IntType)),MethodDecl(Id(kori),Instance,[],VoidType,Block([],[AssignStmt(Id(b),FieldAccess(Self(),Id(suck)))]))])])"
+        expect = "Program([ClassDecl(Id(a),Id(b),[AttributeDecl(Instance,ConstDecl(Id(c),IntType,BinaryOp(!=,Id(daaaaaa),IntLit(5)))),AttributeDecl(Instance,VarDecl(Id(cacbu),IntType)),MethodDecl(Id(kori),Instance,[],VoidType,Block([],[AssignStmt(Id(b),FieldAccess(Self(),Id(suck)))]))])])"
         self.assertTrue(TestAST.test(input,expect,306))
+
+    
+    def test_7(self):
+        input = """class a {
+                    void main() {}
+        
+            }"""
+        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(main),Instance,[],Block([],[]))])])"
+        self.assertTrue(TestAST.test(input,expect,307))
+    
+
+    def test_8(self):
+        input = """class zzz {
+                    zzz() {}
+        
+            }"""
+        expect = 'Program([ClassDecl(Id(zzz),[MethodDecl(Id("<init>"),Instance,[],Block([],[]))])])'
+        self.assertTrue(TestAST.test(input,expect,308))
+
+
+    def test_9(self):
+        input = """class a {
+                    void test() {
+                        a[3+x.foo(2)] := a[b[2]] +3;
+                    }
+        
+            }"""
+        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(test),Instance,[],VoidType,Block([],[AssignStmt(ArrayCell(Id(a),BinaryOp(+,IntLit(3),CallExpr(Id(x),Id(foo),[IntLit(2)]))),BinaryOp(+,ArrayCell(Id(a),ArrayCell(Id(b),IntLit(2))),IntLit(3)))]))])])"
+        self.assertTrue(TestAST.test(input,expect,309))
+
+    
+    def test_10(self):
+        input = """class a {
+                    void test() {
+                        x.b[2] := x.m()[3];
+                    }
+        
+            }"""
+        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(test),Instance,[],VoidType,Block([],[AssignStmt(FieldAccess(ArrayCell(Id(b),IntLit(2)),Id(x)),ArrayCell(CallExpr(Id(x),Id(m),[]),IntLit(3)))]))])])"
+        self.assertTrue(TestAST.test(input,expect,310))
+    
+
+    def test_11(self):
+        input = """class Shape {
+                    static final int numOfShape = 0;
+                    final int immuAttribute = 0;
+                    float length,width;
+                    static int getNumOfShape() {
+                        return numOfShape;
+                    }
+                }
+                class Rectangle extends Shape {
+                    float getArea(){
+                    return this.length*this.width;
+                }
+                }"""
+        expect = "Program([ClassDecl(Id(Shape),[AttributeDecl(Static,ConstDecl(Id(numOfShape),IntType,IntLit(0))),AttributeDecl(Instance,ConstDecl(Id(immuAttribute),IntType,IntLit(0))),AttributeDecl(Instance,VarDecl(Id(length),FloatType)),AttributeDecl(Instance,VarDecl(Id(width),FloatType)),MethodDecl(Id(getNumOfShape),Static,[],IntType,Block([],[Return(Id(numOfShape))]))]),ClassDecl(Id(Rectangle),Id(Shape),[MethodDecl(Id(getArea),Instance,[],FloatType,Block([],[Return(BinaryOp(*,FieldAccess(Self(),Id(length)),FieldAccess(Self(),Id(width))))]))])])"
+        self.assertTrue(TestAST.test(input,expect,311))
+
+    
+    def test_12(self):
+        input = """class Shape {
+                    static final int numOfShape = 0;
+                    final int immuAttribute = 0;
+                    float length,width;
+                    static int getNumOfShape() {
+                        return numOfShape;
+                    }
+                }
+                """
+        expect = "Program([ClassDecl(Id(Shape),[AttributeDecl(Static,ConstDecl(Id(numOfShape),IntType,IntLit(0))),AttributeDecl(Instance,ConstDecl(Id(immuAttribute),IntType,IntLit(0))),AttributeDecl(Instance,VarDecl(Id(length),FloatType)),AttributeDecl(Instance,VarDecl(Id(width),FloatType)),MethodDecl(Id(getNumOfShape),Static,[],IntType,Block([],[Return(Id(numOfShape))]))])])"
+        self.assertTrue(TestAST.test(input,expect,312))
+
+
+    def test_13(self):
+        input = """class Rectangle extends Shape {
+                    float getArea(){
+                    return this.length*this.width;
+                }"""
+        expect = "Program([ClassDecl(Id(Rectangle),Id(Shape),[MethodDecl(Id(getArea),Instance,[],FloatType,Block([],[Return(BinaryOp(*,FieldAccess(Self(),Id(length)),FieldAccess(Self(),Id(width))))]))])])"
+        self.assertTrue(TestAST.test(input,expect,313))
+    
+
+    def test_14(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,314))
+
+
+    def test_15(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,315))
+
+
+    def test_16(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,316))
+
+
+    def test_17(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,317))
+
+
+    def test_18(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,318))
+
+
+    def test_19(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,319))
+
+
+    def test_20(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,320))
+
+
+    def test_21(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,321))
+
+
+    def test_22(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,322))
+
+
+    def test_23(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,323))
+
+
+    def test_24(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,324))
+
+
+    def test_25(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,325))
+
+
+    def test_26(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,326))
+
+
+    def test_27(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,327))
+
+
+    def test_28(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,328))
+
+
+    def test_29(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,329))
+
+
+    def test_30(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,330))
+
+
+    def test_31(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,331))
+
+
+    def test_32(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,332))
+
+
+    def test_33(self):
+        input = """ """
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,333))
+
+
+    

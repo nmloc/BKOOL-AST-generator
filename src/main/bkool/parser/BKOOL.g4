@@ -66,16 +66,16 @@ stmt_wo_return: asmStmt
 			  | stmtBlock
 			  ;
 
-exp: exp (LESS | GREATER | LESS_OR_EQUAL | GREATER_OR_EQUAL) exp | exp1;
+exp: exp (LESS | GREATER | LESS_OR_EQUAL | GREATER_OR_EQUAL) exp	| exp1;
 exp1: exp1 (EQUAL | NOT_EQUAL) exp1 								| exp2;
-exp2: exp2 (AND | OR) exp3 										| exp3;
+exp2: exp2 (AND | OR) exp3 											| exp3;
 exp3: exp3 (ADDOP | SUBOP) exp4 									| exp4;
-exp4: exp4 (MULOP | I_DIV | F_DIV | MOD) exp5 					| exp5;
-exp5: exp5 CONCATENATION exp6 									| exp6;
-exp6: NOT exp6 													| exp7;
-exp7: (ADDOP | SUBOP) exp7 										| exp8;
+exp4: exp4 (MULOP | I_DIV | F_DIV | MOD) exp5 						| exp5;
+exp5: exp5 CONCATENATION exp6 										| exp6;
+exp6: NOT exp6 														| exp7;
+exp7: (ADDOP | SUBOP) exp7 											| exp8;
 exp8: exp8 LSB exp8 RSB 											| exp9;
-exp9: exp9 DOT exp10 expListWithBrackets? 						| exp10;
+exp9: exp9 DOT exp10 expListWithBrackets? 							| exp10;
 exp10: NEW exp10 LB expList? RB 									| exp11;
 exp11: atom | method_invo | asmStmt | invokeStmt;
 
