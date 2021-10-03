@@ -201,7 +201,7 @@ class Block(Stmt):
 class ConstDecl(Decl):
     constant : Id
     constType : Type
-    value : Literal
+    value : Expr
     def __str__(self):
         return "ConstDecl(" + str(self.constant) + "," + str(self.constType) + "," + str(self.value) + ")"
 

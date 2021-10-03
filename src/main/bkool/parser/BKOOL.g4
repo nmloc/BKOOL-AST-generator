@@ -19,38 +19,32 @@ typ: BOOLEAN | INT | FLOAT | STRING;
 //classDecl
 classDecl: CLASS className (EXTENDS ID)? LP classMem* RP;
 className: ID;
-classMem: attributeDecl | methodDecl | constructor | mainMethod;
+classMem: attributeDecl | methodDecl | constructor | mainMethod | voidMethod;
 
 //attributeDecl
-attributeDecl: mutableAttribute | immutableAttribute | arrDecl | objDecl;
+attributeDecl: mutableAttribute | immutableAttribute | arrDecl;
 mutableAttribute: STATIC? typ ID muAttrInit (COMMA ID muAttrInit)* SEMI;
-muAttrInit: (EQUAL_SIGN expr)?;
+muAttrInit: (EQUAL_SIGN exp)?;
 immutableAttribute: (FINAL | STATIC FINAL | FINAL STATIC) typ ID immuAttrInit (COMMA ID immuAttrInit)* SEMI;
-immuAttrInit: EQUAL_SIGN expr;
+immuAttrInit: EQUAL_SIGN exp;
 
 //methodDecl
-methodDecl: STATIC? (typ | VOID) ID LB paraList? RB (stmtBlock | stmtBlock_wo_return);
+methodDecl: STATIC? typ ID LB paraList? RB stmtBlock;
 paraList: paraInit (SEMI paraInit)*;
 paraInit: typ ID (COMMA ID)*;
 
 //special method
 constructor: className LB paraList? RB stmtBlock_wo_return;
 mainMethod: STATIC? VOID 'main' LB RB stmtBlock_wo_return;
+voidMethod: STATIC? VOID ID LB paraList? RB stmtBlock_wo_return;
 
 //arr_decl
-arrDecl: arrTyp ID SEMI;
-
-//object_decl
-objDecl: className objMem SEMI;
-objMem: objName (COMMA objName)*;
-objName: ID (EQUAL_SIGN ID)?;
-
-/*-------------------Type-------------------*/
-
-//array
+arrDecl: arrTyp ID arrInit (COMMA ID arrInit)* SEMI;
 arrTyp: typ LSB INT_LIT RSB;
+arrInit: (EQUAL_SIGN arr_lit)?;
 
-/*-------------------Expression-------------------*/
+
+/*-------------------expession-------------------*/
 stmt: asmStmt
 	| ifStmt
 	| forStmt
@@ -72,38 +66,38 @@ stmt_wo_return: asmStmt
 			  | stmtBlock
 			  ;
 
-expr: expr (LESS | GREATER | LESS_OR_EQUAL | GREATER_OR_EQUAL) expr | expr1;
-expr1: expr1 (EQUAL | NOT_EQUAL) expr1 								| expr2;
-expr2: expr2 (AND | OR) expr3 										| expr3;
-expr3: expr3 (ADDOP | SUBOP) expr4 									| expr4;
-expr4: expr4 (MULOP | I_DIV | F_DIV | MOD) expr5 					| expr5;
-expr5: expr5 CONCATENATION expr6 									| expr6;
-expr6: NOT expr6 													| expr7;
-expr7: (ADDOP | SUBOP) expr7 										| expr8;
-expr8: expr8 LSB expr8 RSB 											| expr9;
-expr9: expr9 DOT expr10 exprListWithBrackets? 						| expr10;
-expr10: NEW expr10 LB exprList? RB 									| expr11;
-expr11: atom | method_invo | asmStmt | invokeStmt;
+exp: exp (LESS | GREATER | LESS_OR_EQUAL | GREATER_OR_EQUAL) exp | exp1;
+exp1: exp1 (EQUAL | NOT_EQUAL) exp1 								| exp2;
+exp2: exp2 (AND | OR) exp3 										| exp3;
+exp3: exp3 (ADDOP | SUBOP) exp4 									| exp4;
+exp4: exp4 (MULOP | I_DIV | F_DIV | MOD) exp5 					| exp5;
+exp5: exp5 CONCATENATION exp6 									| exp6;
+exp6: NOT exp6 													| exp7;
+exp7: (ADDOP | SUBOP) exp7 										| exp8;
+exp8: exp8 LSB exp8 RSB 											| exp9;
+exp9: exp9 DOT exp10 expListWithBrackets? 						| exp10;
+exp10: NEW exp10 LB expList? RB 									| exp11;
+exp11: atom | method_invo | asmStmt | invokeStmt;
 
-atom: LB expr RB | literal | THIS | ID;
-exprList: (expr (COMMA expr)*);
-exprListWithBrackets: (LB (expr (COMMA expr)*)? RB);
+atom: LB expList RB | literal | THIS | ID;
+expList: (exp (COMMA exp)*);
+expListWithBrackets: (LB (exp (COMMA exp)*)? RB);
 
 /*-------------------Statement-------------------*/
 
 //block statement
-stmtBlock: LP (attributeDecl | arrDecl | objDecl | stmt)* RP;
-stmtBlock_wo_return: LP (attributeDecl | arrDecl | objDecl | stmt_wo_return)* RP;
+stmtBlock: LP (attributeDecl | stmt)* RP;
+stmtBlock_wo_return: LP (attributeDecl | stmt_wo_return)* RP;
 
 //assignment statement
-asmStmt: lhs ASSIGN expr SEMI;
-lhs: ID | (ID|THIS) DOT (ID|ID LSB expr RSB) | ID LSB expr RSB;
+asmStmt: lhs ASSIGN exp SEMI;
+lhs: ID | (ID|THIS) DOT (ID|ID LSB exp RSB) | ID LSB exp RSB;
 
 //if statement
-ifStmt: IF expr THEN stmt (ELSE stmt)?;
+ifStmt: IF exp THEN stmt (ELSE stmt)?;
 
 //for statement
-forStmt: FOR ID ASSIGN expr (TO|DOWNTO) expr DO stmt;
+forStmt: FOR ID ASSIGN exp (TO|DOWNTO) exp DO stmt;
 
 //break statement
 breakStmt: BREAK SEMI;
@@ -112,14 +106,13 @@ breakStmt: BREAK SEMI;
 continueStmt: CONTINUE SEMI;
 
 //return statement
-returnStmt: RETURN expr SEMI;
+returnStmt: RETURN exp SEMI;
 
 //method invocation statement
-method_invo: (ID|THIS) DOT expr exprListWithBrackets? SEMI;
+method_invo: (ID|THIS) DOT exp expListWithBrackets? SEMI;
 
 //invoke statement
-invokeStmt: ID LB arguList? RB;
-arguList: expr (COMMA expr)*;
+invokeStmt: ID LB expList? RB;
 
 /*-------------------Lexical Structure-------------------*/
 

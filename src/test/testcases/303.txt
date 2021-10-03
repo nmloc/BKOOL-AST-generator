@@ -1,4 +1,6 @@
-class Loc {
-            int foo(int x,y,z; float y) {}
+class test {
+            final int x = 5;
+            final int a, b = 6;
+            final float h = 1, k = 2;
             }
         
