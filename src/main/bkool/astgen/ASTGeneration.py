@@ -73,52 +73,52 @@ class ASTGeneration(BKOOLVisitor):
         
 
     def visitMutableAttribute(self, ctx:BKOOLParser.MutableAttributeContext):
-        #mutableAttribute: STATIC? typ ID muAttrInit (COMMA ID muAttrInit)* SEMI;
+        #mutableAttribute: STATIC? typ ID muInit (COMMA ID muInit)* SEMI;
         kind = Static() if ctx.STATIC() else Instance()
         result = ""
         result += str(AttributeDecl(kind, VarDecl(Id(ctx.ID(0).getText()),
                                                     ctx.typ().accept(self),
-                                                    ctx.muAttrInit(0).accept(self))))
+                                                    ctx.muInit(0).accept(self))))
         if ctx.COMMA():
             size = len(ctx.COMMA())
             for i in range(1, size+1):
                 result += ',' + str(AttributeDecl(kind, VarDecl(Id(ctx.ID(i).getText()),
                                                                     ctx.typ().accept(self),
-                                                                    ctx.muAttrInit(i).accept(self))))
+                                                                    ctx.muInit(i).accept(self))))
         return result
 
 
-    def visitMuAttrInit(self, ctx:BKOOLParser.MuAttrInitContext):
-        #muAttrInit: (EQUAL_SIGN exp)?;
+    def visitMuInit(self, ctx:BKOOLParser.MuInitContext):
+        #muInit: (EQUAL_SIGN exp)?;
         return ctx.exp().accept(self) if ctx.exp() else None
 
 
     def visitImmutableAttribute(self, ctx:BKOOLParser.ImmutableAttributeContext):
-        #immutableAttribute: (FINAL | STATIC FINAL | FINAL STATIC) typ ID immuAttrInit (COMMA ID immuAttrInit)* SEMI;
+        #immutableAttribute: (FINAL | STATIC FINAL | FINAL STATIC) typ ID immuInit (COMMA ID immuInit)* SEMI;
         kind = Static() if ctx.STATIC() else Instance()
         result = ""
-        result += str(AttributeDecl(kind, ConstDecl(Id(ctx.ID(0).getText()), ctx.typ().accept(self), ctx.immuAttrInit(0).accept(self))))
+        result += str(AttributeDecl(kind, ConstDecl(Id(ctx.ID(0).getText()), ctx.typ().accept(self), ctx.immuInit(0).accept(self))))
         if ctx.COMMA():
             size = len(ctx.COMMA())
             for i in range(1, size+1):
-                result += ',' + str(AttributeDecl(kind, ConstDecl(Id(ctx.ID(i).getText()), ctx.typ().accept(self), ctx.immuAttrInit(i).accept(self))))
+                result += ',' + str(AttributeDecl(kind, ConstDecl(Id(ctx.ID(i).getText()), ctx.typ().accept(self), ctx.immuInit(i).accept(self))))
         return result
 
 
-    def visitImmuAttrInit(self, ctx:BKOOLParser.ImmuAttrInitContext):
-        #immuAttrInit: EQUAL_SIGN exp;
+    def visitImmuInit(self, ctx:BKOOLParser.ImmuInitContext):
+        #immuInit: EQUAL_SIGN exp;
         return ctx.exp().accept(self) if ctx.exp() else None
 
 
     def visitObjAttribute(self, ctx:BKOOLParser.ObjAttributeContext):
-        #objAttribute: STATIC? objTyp ID objAttrInit (COMMA ID objAttrInit)* SEMI;
+        #objAttribute: STATIC? objTyp ID objInit (COMMA ID objInit)* SEMI;
         kind = Static() if ctx.STATIC() else Instance()
         result = ""
-        result += str(AttributeDecl(kind, VarDecl(Id(ctx.ID(0).getText()), ctx.objTyp().accept(self), ctx.objAttrInit(0).accept(self))))
+        result += str(AttributeDecl(kind, VarDecl(Id(ctx.ID(0).getText()), ctx.objTyp().accept(self), ctx.objInit(0).accept(self))))
         if ctx.COMMA():
             size = len(ctx.COMMA())
             for i in range(1, size+1):
-                result += ',' + str(AttributeDecl(kind, VarDecl(Id(ctx.ID(i).getText()), ctx.objTyp().accept(self), ctx.objAttrInit(i).accept(self))))
+                result += ',' + str(AttributeDecl(kind, VarDecl(Id(ctx.ID(i).getText()), ctx.objTyp().accept(self), ctx.objInit(i).accept(self))))
         return result
 
 
@@ -127,9 +127,9 @@ class ASTGeneration(BKOOLVisitor):
         return ClassType(Id(ctx.ID().getText()))
     
 
-    def visitObjAttrInit(self, ctx:BKOOLParser.ObjAttrInitContext):
-        #objAttrInit: (EQUAL_SIGN exp10)?;
-        return ctx.exp10().accept(self) if ctx.exp10() else NullLiteral()
+    def visitObjInit(self, ctx:BKOOLParser.ObjInitContext):
+        #objInit: (EQUAL_SIGN exp10)?;
+        return ctx.exp10().accept(self) if ctx.exp10() else None
 
 
     def visitMethodDecl(self, ctx:BKOOLParser.MethodDeclContext):
@@ -366,7 +366,7 @@ class ASTGeneration(BKOOLVisitor):
         #exp10: NEW exp10 LB expList? RB | exp11;
         if ctx.getChildCount() > 2:
             return NewExpr( ctx.exp10().accept(self),
-                            ctx.expList().accept(self) if ctx.expList() else [NullLiteral()])
+                            ctx.expList().accept(self) if ctx.expList() else [])
         else:
             return ctx.exp11().accept(self)
 
@@ -417,15 +417,106 @@ class ASTGeneration(BKOOLVisitor):
             return []
 
 
+    def visitVarDecl(self, ctx:BKOOLParser.VarDeclContext):
+        #varDecl: mutableVar | immutableVar | objVar;
+        if ctx.mutableVar():
+            return ctx.mutableVar().accept(self)
+        elif ctx.immutableVar():
+            return ctx.immutableVar().accept(self)
+        elif ctx.objVar():
+            return ctx.objVar().accept(self)
+
+
+    def visitMutableVar(self, ctx:BKOOLParser.MutableVarContext):
+        #mutableVar: typ ID muInit (COMMA ID muInit)* SEMI;
+        result = ""
+        result += str(VarDecl(Id(ctx.ID(0).getText()),
+                                ctx.typ().accept(self),
+                                ctx.muInit(0).accept(self)))
+        if ctx.COMMA():
+            size = len(ctx.COMMA())
+            for i in range(1, size+1):
+                result += ',' + str(VarDecl(Id(ctx.ID(i).getText()),
+                                            ctx.typ().accept(self),
+                                            ctx.muInit(i).accept(self)))
+        return result
+
+
+    def visitImmutableVar(self, ctx:BKOOLParser.ImmutableVarContext):
+        #immutableVar: FINAL? typ ID immuInit (COMMA ID immuInit)* SEMI;
+        result = ""
+        result += str(ConstDecl(Id(ctx.ID(0).getText()),
+                                ctx.typ().accept(self),
+                                ctx.immuInit(0).accept(self)))
+        if ctx.COMMA():
+            size = len(ctx.COMMA())
+            for i in range(1, size+1):
+                result += ',' + str(ConstDecl(Id(ctx.ID(i).getText()),
+                                            ctx.typ().accept(self),
+                                            ctx.immuInit(i).accept(self)))
+        return result
+
+
+    def visitObjVar(self, ctx:BKOOLParser.ObjVarContext):
+        #objVar: objTyp ID objInit (COMMA ID objInit)* SEMI;
+        result = ""
+        result += str(VarDecl(  Id(ctx.ID(0).getText()),
+                                ctx.objTyp().accept(self),
+                                ctx.objInit(0).accept(self)))
+        if ctx.COMMA():
+            size = len(ctx.COMMA())
+            for i in range(1, size+1):
+                result += ',' + str(VarDecl(Id( ctx.ID(i).getText()),
+                                                ctx.objTyp().accept(self),
+                                                ctx.objInit(i).accept(self)))
+        return result
+
+
+    def visitVarDecl_constructor(self, ctx:BKOOLParser.VarDecl_constructorContext):
+        #varDecl: mutableVar_constructor | immutableVar | objVar;
+        if ctx.mutableVar_constructor():
+            return ctx.mutableVar_constructor().accept(self)
+        elif ctx.immutableVar():
+            return ctx.immutableVar().accept(self)
+        elif ctx.objVar():
+            return ctx.objVar().accept(self)
+
+
+    def visitMutableVar_constructor(self, ctx:BKOOLParser.MutableVar_constructorContext):
+        #mutableVar_constructor: typ ID cstInit (COMMA ID cstInit)* SEMI;
+        result = ""
+        result += str(VarDecl(Id(ctx.ID(0).getText()),
+                                ctx.typ().accept(self),
+                                ctx.cstInit(0).accept(self)))
+        if ctx.COMMA():
+            size = len(ctx.COMMA())
+            for i in range(1, size+1):
+                result += ',' + str(VarDecl(Id(ctx.ID(i).getText()),
+                                            ctx.typ().accept(self),
+                                            ctx.cstInit(i).accept(self)))
+        return result
+
+
+    def visitCstInit(self, ctx:BKOOLParser.CstInitContext):
+        #cstInit: (EQUAL_SIGN exp)?;
+        return ctx.exp().accept(self) if ctx.exp() else NullLiteral()
+
+
     def visitStmtBlock(self, ctx:BKOOLParser.StmtBlockContext):
-        #stmtBlock: LP (attributeDecl | stmt)* RP;
-        return Block([self.visit(x) for x in ctx.attributeDecl()],
+        #stmtBlock: LP (varDecl | stmt)* RP;
+        return Block([self.visit(x) for x in ctx.varDecl()],
                      [self.visit(y) for y in ctx.stmt()])
 
 
     def visitStmtBlock_wo_return(self, ctx:BKOOLParser.StmtBlock_wo_returnContext):
-        #stmtBlock_wo_return: LP (attributeDecl | stmt_wo_return)* RP;
-        return Block([self.visit(x) for x in ctx.attributeDecl()],
+        #stmtBlock_wo_return: LP (varDecl | stmt_wo_return)* RP;
+        return Block([self.visit(x) for x in ctx.varDecl()],
+                     [self.visit(y) for y in ctx.stmt_wo_return()])
+
+
+    def visitStmtBlock_constructor(self, ctx:BKOOLParser.StmtBlock_constructorContext):
+        #stmtBlock_constructor: LP (varDecl_constructor | stmt_wo_return)* RP;
+        return Block([self.visit(x) for x in ctx.varDecl_constructor()],
                      [self.visit(y) for y in ctx.stmt_wo_return()])
 
 

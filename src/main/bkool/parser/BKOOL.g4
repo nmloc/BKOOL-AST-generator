@@ -24,13 +24,13 @@ classMem: attributeDecl | methodDecl | constructor | mainMethod | voidMethod;
 
 //attributeDecl
 attributeDecl: mutableAttribute | immutableAttribute | objAttribute;
-mutableAttribute: STATIC? typ ID muAttrInit (COMMA ID muAttrInit)* SEMI;
-muAttrInit: (EQUAL_SIGN exp)?;
-immutableAttribute: (FINAL | STATIC FINAL | FINAL STATIC) typ ID immuAttrInit (COMMA ID immuAttrInit)* SEMI;
-immuAttrInit: EQUAL_SIGN exp;
-objAttribute: STATIC? objTyp ID objAttrInit (COMMA ID objAttrInit)* SEMI;
+mutableAttribute: STATIC? typ ID muInit (COMMA ID muInit)* SEMI;
+muInit: (EQUAL_SIGN exp)?;
+immutableAttribute: (FINAL | STATIC FINAL | FINAL STATIC) typ ID immuInit (COMMA ID immuInit)* SEMI;
+immuInit: EQUAL_SIGN exp;
+objAttribute: STATIC? objTyp ID objInit (COMMA ID objInit)* SEMI;
 objTyp: ID;
-objAttrInit: (EQUAL_SIGN exp10)?;
+objInit: (EQUAL_SIGN exp10)?;
 
 //methodDecl
 methodDecl: STATIC? typ ID LB paraList? RB stmtBlock;
@@ -80,11 +80,28 @@ atom: LB expList RB | literal | THIS | ID;
 expList: (exp (COMMA exp)*);
 expListWithBrackets: (LB (exp (COMMA exp)*)? RB);
 
+
+/*-------------------VarDecl-------------------*/
+
+varDecl: mutableVar | immutableVar | objVar;
+mutableVar: typ ID muInit (COMMA ID muInit)* SEMI;
+immutableVar: FINAL? typ ID immuInit (COMMA ID immuInit)* SEMI;
+objVar: objTyp ID objInit (COMMA ID objInit)* SEMI;
+
+
+/*-------------------VarDecl for constructor-------------------*/
+
+varDecl_constructor: mutableVar_constructor | immutableVar | objVar;
+mutableVar_constructor: typ ID cstInit (COMMA ID cstInit)* SEMI;
+cstInit: (EQUAL_SIGN exp)?;
+
+
 /*-------------------Statement-------------------*/
 
 //block statement
-stmtBlock: LP (attributeDecl | stmt)* RP;
-stmtBlock_wo_return: LP (attributeDecl | stmt_wo_return)* RP;
+stmtBlock: LP (varDecl | stmt)* RP;
+stmtBlock_wo_return: LP (varDecl | stmt_wo_return)* RP;
+stmtBlock_constructor: LP (varDecl_constructor | stmt_wo_return)* RP;
 
 //assignment statement
 asmStmt: lhs ASSIGN exp SEMI;

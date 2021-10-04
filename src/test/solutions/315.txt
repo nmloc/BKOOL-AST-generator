@@ -1,1 +1,1 @@
-Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),AssignStmt(Id(height),IntLit(10))])))],[]))])])
+Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),AssignStmt(Id(height),IntLit(10))]))],[]))])])
