@@ -196,56 +196,107 @@ class ASTGenSuite(unittest.TestCase):
         self.assertTrue(TestAST.test(input,expect,316))
 
 
-    # def test_17(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,317))
+    def test_17(self):
+        input = """class test {
+                        void main(){
+                            this.aPI := 3.14;
+                            value := x.foo(5);
+                            l[3] := value * 2;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[AssignStmt(FieldAccess(Id(this),Id(aPI)),FloatLit(3.14)),AssignStmt(Id(value),CallExpr(Id(x),Id(foo),[IntLit(5)])),AssignStmt(ArrayCell(Id(l),IntLit(3)),BinaryOp(*,Id(value),IntLit(2)))]))])])"
+        self.assertTrue(TestAST.test(input,expect,317))
 
 
-    # def test_18(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,318))
+    def test_18(self):
+        input = """class test {
+                        void main(){
+                            if flag then
+                                io.writeStrLn(“Expression is true”);
+                            else
+                                io.writeStrLn (“Expression is false”);
+                        }
+                    }"""
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,318))
 
 
-    # def test_19(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,319))
+    def test_19(self):
+        input = """class test {
+                        void main(){
+                            float r,s;
+                            int[5] a,b;
+                            r:=2.0;
+                            s:=r*r*this.myPI;
+                            a[0]:= s;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(r),FloatType)),AttributeDecl(Instance,VarDecl(Id(s),FloatType)),AttributeDecl(Instance,VarDecl(Id(a),ArrayType(5,IntType))),AttributeDecl(Instance,VarDecl(Id(b),ArrayType(5,IntType)))],[AssignStmt(Id(r),FloatLit(2.0)),AssignStmt(Id(s),BinaryOp(*,BinaryOp(*,Id(r),Id(r)),FieldAccess(Self(),Id(myPI)))),AssignStmt(ArrayCell(Id(a),IntLit(0)),Id(s))]))])])"
+        self.assertTrue(TestAST.test(input,expect,319))
 
 
-    # def test_20(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,320))
+    def test_20(self):
+        input = """class test {
+                        void main(){
+                            for i := 1 to 100 do {
+                                io.writeIntLn(i);
+                                Intarray[i] := i + 1;
+                            }
+                            for x := 5 downto 2 do
+                                io.writeIntLn(x);
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[For(Id(i),IntLit(1),IntLit(100),True,Block([],[Call(Id(io),Id(writeIntLn),[Id(i)]),AssignStmt(ArrayCell(Id(Intarray),Id(i)),BinaryOp(+,Id(i),IntLit(1)))])]),For(Id(x),IntLit(5),IntLit(2),False,Call(Id(io),Id(writeIntLn),[Id(x)])])]))])])"
+        self.assertTrue(TestAST.test(input,expect,320))
 
 
-    # def test_21(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,321))
+    def test_21(self):
+        input = """class test {
+                        void main(){
+                            break;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[Break]))])])"
+        self.assertTrue(TestAST.test(input,expect,321))
 
 
-    # def test_22(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,322))
+    def test_22(self):
+        input = """class test {
+                        void main(){
+                            continue;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[Continue]))])])"
+        self.assertTrue(TestAST.test(input,expect,322))
 
 
-    # def test_23(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,323))
+    def test_23(self):
+        input = """class test {
+                        void main(){
+                            return a;
+                        }
+                    }"""
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,323))
 
 
-    # def test_24(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,324))
+    def test_24(self):
+        input = """class Example1 {
+                            int factorial(int n){
+                            if n == 0 then return 1; else return n * this.factorial(n - 1);
+                        }
+                        void main(){
+                            int x;
+                            x := io.readInt();
+                            io.writeIntLn(this.factorial(x));
+                        }
+                    }"""
+        expect = ""
+        self.assertTrue(TestAST.test(input,expect,324))
 
 
     # def test_25(self):
-    #     input = """ """
+    #     input = """"""
     #     expect = ""
     #     self.assertTrue(TestAST.test(input,expect,325))
 

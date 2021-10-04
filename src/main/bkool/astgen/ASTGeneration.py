@@ -150,21 +150,22 @@ class ASTGeneration(BKOOLVisitor):
         if ctx.SEMI():
             size = len(ctx.SEMI())
             for i in range(0,size+1):
-                result.extend(ctx.paraInit(i).accept(self))
+                result += ctx.paraInit(i).accept(self)
         else:
-            result.extend(ctx.paraInit().accept(self))
+            result += ctx.paraInit(0).accept(self)
         return result
 
 
     def visitParaInit(self, ctx:BKOOLParser.ParaInitContext):
         #paraInit: typ ID (COMMA ID)*;
         paraInit = []
+        typ = ctx.typ().accept(self)
         if ctx.COMMA():
             size = len(ctx.COMMA())
             for i in range(0,size+1):
-                paraInit += [VarDecl(Id(ctx.ID(i).getText()), ctx.typ().accept(self))]
+                paraInit.append(VarDecl(Id(ctx.ID(i).getText()), typ))
         else:
-            paraInit += [VarDecl(Id(ctx.ID(0).getText()), ctx.typ().accept(self))]
+            paraInit.append(VarDecl(Id(ctx.ID(0).getText()), typ))
         return paraInit
 
 
@@ -264,7 +265,7 @@ class ASTGeneration(BKOOLVisitor):
     def visitExp1(self, ctx:BKOOLParser.Exp1Context):
         #exp1: exp1 (EQUAL | NOT_EQUAL) exp1 | exp2;
         if ctx.getChildCount() == 3:
-            return BinaryOp("=" if ctx.EQUAL() else "!=",
+            return BinaryOp("==" if ctx.EQUAL() else "!=",
                             ctx.exp1(0).accept(self),
                             ctx.exp1(1).accept(self))
         else:

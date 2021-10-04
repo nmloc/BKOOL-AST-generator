@@ -1,1 +1,5 @@
- 
+class test {
+                        void main(){
+                            continue;
+                        }
+                    }
