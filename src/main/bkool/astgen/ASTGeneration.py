@@ -1,7 +1,7 @@
 from BKOOLVisitor import BKOOLVisitor
 from BKOOLParser import BKOOLParser
 from AST import *
-from main.bkool.utils.AST import ArrayCell, ArrayLiteral, ArrayType, Assign, AttributeDecl, BinaryOp, Block, BoolType, BooleanLiteral, Break, CallExpr, CallStmt, ClassDecl, ConstDecl, Continue, Expr, FieldAccess, FloatLiteral, FloatType, For, Id, If, Instance, IntLiteral, IntType, MethodDecl, NewExpr, Program, Return, SelfLiteral, Static, StringLiteral, StringType, Type, UnaryOp, VarDecl, VoidType
+from main.bkool.utils.AST import ArrayCell, ArrayLiteral, ArrayType, Assign, AttributeDecl, BinaryOp, Block, BoolType, BooleanLiteral, Break, CallExpr, CallStmt, ClassDecl, ClassType, ConstDecl, Continue, Expr, FieldAccess, FloatLiteral, FloatType, For, Id, If, Instance, IntLiteral, IntType, MethodDecl, NewExpr, NullLiteral, Program, Return, SelfLiteral, Static, StringLiteral, StringType, Type, UnaryOp, VarDecl, VoidType
 
 class ASTGeneration(BKOOLVisitor):
 
@@ -10,7 +10,7 @@ class ASTGeneration(BKOOLVisitor):
         return Program([self.visit(x) for x in ctx.classDecl()])
 
     def visitTyp(self,ctx:BKOOLParser.TypContext):
-        #typ: BOOLEAN | INT | FLOAT | STRING;
+        #typ: BOOLEAN | INT | FLOAT | STRING | arrTyp | objTyp;
         if ctx.BOOLEAN(): 
             return BoolType()
         elif ctx.INT(): 
@@ -19,6 +19,24 @@ class ASTGeneration(BKOOLVisitor):
             return FloatType()
         elif ctx.STRING(): 
             return StringType()
+        elif ctx.arrTyp(): 
+            return ctx.arrTyp().accept(self)
+
+    
+    def visitArrTyp(self, ctx:BKOOLParser.ArrTypContext):
+        #arrTyp: (BOOLEAN | INT | FLOAT | STRING | objTyp) LSB INT_LIT RSB;
+        if ctx.BOOLEAN():
+            typ = BoolType()
+        elif ctx.INT():
+            typ = IntType()
+        elif ctx.FLOAT():
+            typ = FloatType()
+        elif ctx.STRING():
+            typ = StringType()
+        elif ctx.objTyp():
+            typ = ctx.objTyp().accept(self)
+        return ArrayType(ctx.INT_LIT().getText(), typ)
+
 
     def visitClassDecl(self, ctx:BKOOLParser.ClassDeclContext):
         #classDecl: CLASS className (EXTENDS ID)? LP classMem* RP;
@@ -45,13 +63,13 @@ class ASTGeneration(BKOOLVisitor):
 
 
     def visitAttributeDecl(self, ctx:BKOOLParser.AttributeDeclContext):
-        #attributeDecl: mutableAttribute | immutableAttribute | arrDecl;
+        #attributeDecl: mutableAttribute | immutableAttribute | objAttribute;
         if ctx.mutableAttribute():
             return ctx.mutableAttribute().accept(self)
         elif ctx.immutableAttribute():
             return ctx.immutableAttribute().accept(self)
-        elif ctx.arrDecl():
-            return ctx.arrDecl().accept(self)
+        elif ctx.objAttribute():
+            return ctx.objAttribute().accept(self)
         
 
     def visitMutableAttribute(self, ctx:BKOOLParser.MutableAttributeContext):
@@ -90,6 +108,28 @@ class ASTGeneration(BKOOLVisitor):
     def visitImmuAttrInit(self, ctx:BKOOLParser.ImmuAttrInitContext):
         #immuAttrInit: EQUAL_SIGN exp;
         return ctx.exp().accept(self) if ctx.exp() else None
+
+
+    def visitObjAttribute(self, ctx:BKOOLParser.ObjAttributeContext):
+        #objAttribute: STATIC? objTyp ID objAttrInit (COMMA ID objAttrInit)* SEMI;
+        kind = Static() if ctx.STATIC() else Instance()
+        result = ""
+        result += str(AttributeDecl(kind, VarDecl(Id(ctx.ID(0).getText()), ctx.objTyp().accept(self), ctx.objAttrInit(0).accept(self))))
+        if ctx.COMMA():
+            size = len(ctx.COMMA())
+            for i in range(1, size+1):
+                result += ',' + str(AttributeDecl(kind, VarDecl(Id(ctx.ID(i).getText()), ctx.objTyp().accept(self), ctx.objAttrInit(i).accept(self))))
+        return result
+
+
+    def visitObjTyp(self, ctx:BKOOLParser.ObjTypContext):
+        #objTyp: ID;
+        return ClassType(Id(ctx.ID().getText()))
+    
+
+    def visitObjAttrInit(self, ctx:BKOOLParser.ObjAttrInitContext):
+        #objAttrInit: (EQUAL_SIGN exp10)?;
+        return ctx.exp10().accept(self) if ctx.exp10() else NullLiteral()
 
 
     def visitMethodDecl(self, ctx:BKOOLParser.MethodDeclContext):
@@ -162,30 +202,6 @@ class ASTGeneration(BKOOLVisitor):
         return result
 
 
-    def visitArrDecl(self, ctx:BKOOLParser.ArrDeclContext):
-        #arrDecl: arrTyp ID arrInit (COMMA ID arrInit)* SEMI;
-        result = str(AttributeDecl(Instance(), VarDecl(Id(ctx.ID(0).getText()),
-                                                        ctx.arrTyp().accept(self),
-                                                        ctx.arrInit(0).accept(self))))
-        if ctx.COMMA():
-            size = len(ctx.COMMA())
-            for i in range(1, size+1):
-                result += ',' + str(AttributeDecl(Instance(), VarDecl(Id(ctx.ID(i).getText()),
-                                                                        ctx.arrTyp().accept(self),
-                                                                        ctx.arrInit(i).accept(self))))
-        return result
-
-
-    def visitArrTyp(self, ctx:BKOOLParser.ArrTypContext):
-        #arr_typ: typ LSB INT_LIT RSB;
-        return ArrayType(ctx.INT_LIT().getText(), ctx.typ().accept(self))
-
-
-    def visitArrInit(self, ctx:BKOOLParser.ArrInitContext):
-        #arrInit: (EQUAL_SIGN arr_lit)?;
-        return ctx.arr_lit().accept(self) if ctx.arr_lit() else None
-
-
     def visitStmt(self, ctx:BKOOLParser.StmtContext):
         if ctx.asmStmt():
             return ctx.asmStmt().accept(self)
@@ -201,8 +217,6 @@ class ASTGeneration(BKOOLVisitor):
             return ctx.returnStmt().accept(self)
         elif ctx.method_invo():
             return ctx.method_invo().accept(self)
-        elif ctx.invokeStmt():
-            return ctx.invokeStmt().accept(self)
         elif ctx.stmtBlock():
             return ctx.stmtBlock().accept(self)
         
@@ -220,8 +234,6 @@ class ASTGeneration(BKOOLVisitor):
             return ctx.continueStmt().accept(self)
         elif ctx.method_invo():
             return ctx.method_invo().accept(self)
-        elif ctx.invokeStmt():
-            return ctx.invokeStmt().accept(self)
         elif ctx.stmtBlock():
             return ctx.stmtBlock().accept(self)
 
@@ -351,23 +363,21 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitExp10(self, ctx:BKOOLParser.Exp10Context):
         #exp10: NEW exp10 LB expList? RB | exp11;
-        if ctx.getChildCount() == 4 or ctx.getChildCount() == 5:
+        if ctx.getChildCount() > 2:
             return NewExpr( ctx.exp10().accept(self),
-                            ctx.expList().accept(self) if ctx.expList() else [])
+                            ctx.expList().accept(self) if ctx.expList() else [NullLiteral()])
         else:
             return ctx.exp11().accept(self)
 
 
     def visitExp11(self, ctx:BKOOLParser.Exp11Context):
-        #exp11: atom | method_invo | asmStmt | invokeStmt;
+        #exp11: atom | method_invo | asmStmt;
         if ctx.atom():
             return ctx.atom().accept(self)
         elif ctx.method_invo():
             return ctx.method_invo().accept(self)
         elif ctx.asmStmt():
             return ctx.asmStmt().accept(self)
-        elif ctx.invokeStmt():
-            return ctx.invokeStmt().accept(self)
 
 
     def visitAtom(self, ctx:BKOOLParser.AtomContext):
@@ -384,13 +394,13 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitExpList(self, ctx:BKOOLParser.ExpListContext):
         #expList: (exp (COMMA exp)*);
-        result = [ctx.exp().accept(self)]
+        result = []
+        result.append(ctx.exp(0).accept(self))
         if ctx.COMMA():
             size = len(ctx.COMMA())
             for i in range(1, size+1):
-                result += ctx.exp(i).accept(self)
-        else:
-            return result
+                result.append(ctx.exp(i).accept(self))
+        return result
 
 
     def visitExpListWithBrackets(self, ctx:BKOOLParser.ExpListWithBracketsContext):
@@ -431,11 +441,11 @@ class ASTGeneration(BKOOLVisitor):
             return ArrayCell(Id(ctx.ID(0).getText()), ctx.exp().accept(self))
         else:
             if ctx.getChildCount() == 3:
-                return FieldAccess( Id(ctx.getChild(1).getText()),
-                                    Id(ctx.getChild(0).getText()) if ctx.ID() else str(SelfLiteral()))
+                return FieldAccess( Id(ctx.getChild(0).getText()) if ctx.ID() else SelfLiteral(),
+                                    Id(ctx.getChild(2).getText()))
             else:
-                return FieldAccess( ArrayCell(Id(ctx.getChild(2).getText()), ctx.exp().accept(self)),
-                                    Id(ctx.getChild(0).getText()) if ctx.ID() else str(SelfLiteral()))
+                return FieldAccess( Id(ctx.getChild(0).getText()) if ctx.ID() else SelfLiteral(),
+                                    ArrayCell(Id(ctx.getChild(2).getText()), ctx.exp().accept(self)))
             
 
 
@@ -448,7 +458,7 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitForStmt(self, ctx:BKOOLParser.ForStmtContext):
         #forStmt: FOR ID ASSIGN exp (TO|DOWNTO) exp DO stmt;
-        return For( ctx.ID().getText(),
+        return For( Id(ctx.ID().getText()),
                     ctx.exp(0).accept(self),
                     ctx.exp(1).accept(self),
                     True if ctx.TO() else False,
@@ -473,17 +483,12 @@ class ASTGeneration(BKOOLVisitor):
     def visitMethod_invo(self, ctx:BKOOLParser.Method_invoContext):
         #method_invo: (ID|THIS) DOT exp expListWithBrackets? SEMI;
         if ctx.expListWithBrackets():
-            return CallStmt(ctx.exp().accept(self),
-                            Id(ctx.ID().getText()) if ctx.ID() else str(SelfLiteral()),
+            return CallStmt(Id(ctx.ID().getText()) if ctx.ID() else SelfLiteral(),
+                            ctx.exp().accept(self),
                             ctx.expListWithBrackets().accept(self))
         else:
-            return FieldAccess( ctx.exp().accept(self),
-                                Id(ctx.ID().getText()) if ctx.ID() else str(SelfLiteral()))
-
-
-    def visitInvokeStmt(self, ctx:BKOOLParser.InvokeStmtContext):
-        #invokeStmt: ID LB expList? RB;
-        return self.visitChildren(ctx)
+            return FieldAccess( Id(ctx.ID().getText()) if ctx.ID() else SelfLiteral(),
+                                ctx.exp().accept(self))
 
 
     def visitLiteral(self, ctx:BKOOLParser.LiteralContext):

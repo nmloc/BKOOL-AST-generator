@@ -14,7 +14,8 @@ options{
 /*-------------------Program Structure-------------------*/
 program: (classDecl)+ EOF;
 
-typ: BOOLEAN | INT | FLOAT | STRING;
+typ: BOOLEAN | INT | FLOAT | STRING | arrTyp;
+arrTyp: (BOOLEAN | INT | FLOAT | STRING | objTyp) LSB INT_LIT RSB;
 
 //classDecl
 classDecl: CLASS className (EXTENDS ID)? LP classMem* RP;
@@ -22,11 +23,14 @@ className: ID;
 classMem: attributeDecl | methodDecl | constructor | mainMethod | voidMethod;
 
 //attributeDecl
-attributeDecl: mutableAttribute | immutableAttribute | arrDecl;
+attributeDecl: mutableAttribute | immutableAttribute | objAttribute;
 mutableAttribute: STATIC? typ ID muAttrInit (COMMA ID muAttrInit)* SEMI;
 muAttrInit: (EQUAL_SIGN exp)?;
 immutableAttribute: (FINAL | STATIC FINAL | FINAL STATIC) typ ID immuAttrInit (COMMA ID immuAttrInit)* SEMI;
 immuAttrInit: EQUAL_SIGN exp;
+objAttribute: STATIC? objTyp ID objAttrInit (COMMA ID objAttrInit)* SEMI;
+objTyp: ID;
+objAttrInit: (EQUAL_SIGN exp10)?;
 
 //methodDecl
 methodDecl: STATIC? typ ID LB paraList? RB stmtBlock;
@@ -38,11 +42,6 @@ constructor: className LB paraList? RB stmtBlock_wo_return;
 mainMethod: STATIC? VOID 'main' LB RB stmtBlock_wo_return;
 voidMethod: STATIC? VOID ID LB paraList? RB stmtBlock_wo_return;
 
-//arr_decl
-arrDecl: arrTyp ID arrInit (COMMA ID arrInit)* SEMI;
-arrTyp: typ LSB INT_LIT RSB;
-arrInit: (EQUAL_SIGN arr_lit)?;
-
 
 /*-------------------expession-------------------*/
 stmt: asmStmt
@@ -52,7 +51,6 @@ stmt: asmStmt
 	| continueStmt
 	| returnStmt
 	| method_invo
-	| invokeStmt
 	| stmtBlock
 	;
 
@@ -62,7 +60,6 @@ stmt_wo_return: asmStmt
 			  | breakStmt
 			  | continueStmt
 			  | method_invo
-			  | invokeStmt
 			  | stmtBlock
 			  ;
 
@@ -77,7 +74,7 @@ exp7: (ADDOP | SUBOP) exp7 											| exp8;
 exp8: exp8 LSB exp8 RSB 											| exp9;
 exp9: exp9 DOT exp10 expListWithBrackets? 							| exp10;
 exp10: NEW exp10 LB expList? RB 									| exp11;
-exp11: atom | method_invo | asmStmt | invokeStmt;
+exp11: atom | method_invo | asmStmt;
 
 atom: LB expList RB | literal | THIS | ID;
 expList: (exp (COMMA exp)*);
@@ -110,9 +107,6 @@ returnStmt: RETURN exp SEMI;
 
 //method invocation statement
 method_invo: (ID|THIS) DOT exp expListWithBrackets? SEMI;
-
-//invoke statement
-invokeStmt: ID LB expList? RB;
 
 /*-------------------Lexical Structure-------------------*/
 

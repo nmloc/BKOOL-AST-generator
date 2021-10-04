@@ -1,1 +1,5 @@
- 
+class test {
+                        void main(){
+                            Shape s = new Shape(5, height := 10)
+                        }
+                    }

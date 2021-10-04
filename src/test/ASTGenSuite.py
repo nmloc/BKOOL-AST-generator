@@ -1,7 +1,6 @@
 import unittest
 from TestUtils import TestAST
 from AST import *
-import traceback
 class ASTGenSuite(unittest.TestCase):
 
     # def test_(self):
@@ -89,7 +88,7 @@ class ASTGenSuite(unittest.TestCase):
                     void main() {}
         
             }"""
-        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(main),Instance,[],Block([],[]))])])"
+        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(main),Static,[],VoidType,Block([],[]))])])"
         self.assertTrue(TestAST.test(input,expect,307))
     
 
@@ -120,7 +119,7 @@ class ASTGenSuite(unittest.TestCase):
                     }
         
             }"""
-        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(test),Instance,[],VoidType,Block([],[AssignStmt(FieldAccess(ArrayCell(Id(b),IntLit(2)),Id(x)),ArrayCell(CallExpr(Id(x),Id(m),[]),IntLit(3)))]))])])"
+        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(test),Instance,[],VoidType,Block([],[AssignStmt(FieldAccess(Id(x),ArrayCell(Id(b),IntLit(2))),ArrayCell(CallExpr(Id(x),Id(m),[]),IntLit(3)))]))])])"
         self.assertTrue(TestAST.test(input,expect,310))
     
 
@@ -166,123 +165,137 @@ class ASTGenSuite(unittest.TestCase):
     
 
     def test_14(self):
-        input = """ """
-        expect = ""
+        input = """class test {
+                        void main(){
+                            Shape s;
+                            s := new Rectangle(3,4);
+                            s := new Triangle(3,4);
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NullLiteral()))],[AssignStmt(Id(s),NewExpr(Id(Rectangle),[IntLit(3),IntLit(4)])),AssignStmt(Id(s),NewExpr(Id(Triangle),[IntLit(3),IntLit(4)]))]))])])"
         self.assertTrue(TestAST.test(input,expect,314))
 
 
     def test_15(self):
-        input = """ """
-        expect = ""
+        input = """class test {
+                        void main(){
+                            Shape s = new Shape(5, height := 10)
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),AssignStmt(Id(height),IntLit(10))])))],[]))])])"
         self.assertTrue(TestAST.test(input,expect,315))
 
 
     def test_16(self):
-        input = """ """
-        expect = ""
+        input = """class test {
+                        void main(){
+                            Shape s =  new Triangle();
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Triangle),[NullLiteral()])))],[]))])])"
         self.assertTrue(TestAST.test(input,expect,316))
 
 
-    def test_17(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,317))
+    # def test_17(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,317))
 
 
-    def test_18(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,318))
+    # def test_18(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,318))
 
 
-    def test_19(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,319))
+    # def test_19(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,319))
 
 
-    def test_20(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,320))
+    # def test_20(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,320))
 
 
-    def test_21(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,321))
+    # def test_21(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,321))
 
 
-    def test_22(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,322))
+    # def test_22(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,322))
 
 
-    def test_23(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,323))
+    # def test_23(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,323))
 
 
-    def test_24(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,324))
+    # def test_24(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,324))
 
 
-    def test_25(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,325))
+    # def test_25(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,325))
 
 
-    def test_26(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,326))
+    # def test_26(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,326))
 
 
-    def test_27(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,327))
+    # def test_27(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,327))
 
 
-    def test_28(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,328))
+    # def test_28(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,328))
 
 
-    def test_29(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,329))
+    # def test_29(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,329))
 
 
-    def test_30(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,330))
+    # def test_30(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,330))
 
 
-    def test_31(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,331))
+    # def test_31(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,331))
 
 
-    def test_32(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,332))
+    # def test_32(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,332))
 
 
-    def test_33(self):
-        input = """ """
-        expect = ""
-        self.assertTrue(TestAST.test(input,expect,333))
+    # def test_33(self):
+    #     input = """ """
+    #     expect = ""
+    #     self.assertTrue(TestAST.test(input,expect,333))
 
 
     

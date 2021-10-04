@@ -19,6 +19,11 @@ class BKOOLVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by BKOOLParser#arrTyp.
+    def visitArrTyp(self, ctx:BKOOLParser.ArrTypContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by BKOOLParser#classDecl.
     def visitClassDecl(self, ctx:BKOOLParser.ClassDeclContext):
         return self.visitChildren(ctx)
@@ -59,6 +64,21 @@ class BKOOLVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by BKOOLParser#objAttribute.
+    def visitObjAttribute(self, ctx:BKOOLParser.ObjAttributeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by BKOOLParser#objTyp.
+    def visitObjTyp(self, ctx:BKOOLParser.ObjTypContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by BKOOLParser#objAttrInit.
+    def visitObjAttrInit(self, ctx:BKOOLParser.ObjAttrInitContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by BKOOLParser#methodDecl.
     def visitMethodDecl(self, ctx:BKOOLParser.MethodDeclContext):
         return self.visitChildren(ctx)
@@ -86,21 +106,6 @@ class BKOOLVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by BKOOLParser#voidMethod.
     def visitVoidMethod(self, ctx:BKOOLParser.VoidMethodContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#arrDecl.
-    def visitArrDecl(self, ctx:BKOOLParser.ArrDeclContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#arrTyp.
-    def visitArrTyp(self, ctx:BKOOLParser.ArrTypContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#arrInit.
-    def visitArrInit(self, ctx:BKOOLParser.ArrInitContext):
         return self.visitChildren(ctx)
 
 
@@ -236,11 +241,6 @@ class BKOOLVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by BKOOLParser#method_invo.
     def visitMethod_invo(self, ctx:BKOOLParser.Method_invoContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by BKOOLParser#invokeStmt.
-    def visitInvokeStmt(self, ctx:BKOOLParser.InvokeStmtContext):
         return self.visitChildren(ctx)
 
 
