@@ -14,7 +14,7 @@ options{
 /*-------------------Program Structure-------------------*/
 program: (classDecl)+ EOF;
 
-typ: BOOLEAN | INT | FLOAT | STRING | arrTyp;
+typ: BOOLEAN | INT | FLOAT | STRING | arrTyp | objTyp;
 arrTyp: (BOOLEAN | INT | FLOAT | STRING | objTyp) LSB INT_LIT RSB;
 
 //classDecl

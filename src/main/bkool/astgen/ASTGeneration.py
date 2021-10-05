@@ -1,3 +1,4 @@
+from os import linesep
 from BKOOLVisitor import BKOOLVisitor
 from BKOOLParser import BKOOLParser
 from AST import *
@@ -21,6 +22,8 @@ class ASTGeneration(BKOOLVisitor):
             return StringType()
         elif ctx.arrTyp(): 
             return ctx.arrTyp().accept(self)
+        elif ctx.objTyp(): 
+            return ctx.objTyp().accept(self)
 
     
     def visitArrTyp(self, ctx:BKOOLParser.ArrTypContext):
@@ -35,7 +38,7 @@ class ASTGeneration(BKOOLVisitor):
             typ = StringType()
         elif ctx.objTyp():
             typ = ctx.objTyp().accept(self)
-        return ArrayType(IntLiteral(ctx.INT_LIT().getText()), typ)
+        return ArrayType(int(ctx.INT_LIT().getText()), typ)
 
 
     def visitClassDecl(self, ctx:BKOOLParser.ClassDeclContext):
@@ -551,7 +554,7 @@ class ASTGeneration(BKOOLVisitor):
         return For( Id(ctx.ID().getText()),
                     ctx.exp(0).accept(self),
                     ctx.exp(1).accept(self),
-                    True if ctx.TO() else False,
+                    bool(True) if ctx.TO() else bool(False),
                     ctx.stmt().accept(self))
 
 
@@ -584,9 +587,9 @@ class ASTGeneration(BKOOLVisitor):
     def visitLiteral(self, ctx:BKOOLParser.LiteralContext):
         #literal: FLOAT_LIT | INT_LIT | bool_lit | STRING_LIT | arr_lit;
         if ctx.FLOAT_LIT():
-            return FloatLiteral(ctx.FLOAT_LIT().getText())
+            return FloatLiteral(float(ctx.FLOAT_LIT().getText()))
         elif ctx.INT_LIT():
-            return IntLiteral(ctx.INT_LIT().getText())
+            return IntLiteral(int(ctx.INT_LIT().getText()))
         elif ctx.bool_lit():
             return BooleanLiteral(ctx.bool_lit().accept(self))
         elif ctx.STRING_LIT():
@@ -597,7 +600,7 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitBool_lit(self, ctx:BKOOLParser.Bool_litContext):
         #bool_lit: TRUE | FALSE;
-        return True if ctx.TRUE() else False
+        return bool(True) if ctx.TRUE() else bool(False)
 
 
     def visitArr_lit(self, ctx:BKOOLParser.Arr_litContext):
@@ -614,9 +617,9 @@ class ASTGeneration(BKOOLVisitor):
     def visitArr_value(self, ctx:BKOOLParser.Arr_valueContext):
         #arr_value: (INT_LIT | FLOAT_LIT | bool_lit | STRING_LIT);
         if ctx.FLOAT_LIT():
-            return FloatLiteral(ctx.FLOAT_LIT().getText())
+            return FloatLiteral(float(ctx.FLOAT_LIT().getText()))
         elif ctx.INT_LIT():
-            return IntLiteral(ctx.INT_LIT().getText())
+            return IntLiteral(int(ctx.INT_LIT().getText()))
         elif ctx.bool_lit():
             return BooleanLiteral(ctx.bool_lit().accept(self))
         elif ctx.STRING_LIT():
