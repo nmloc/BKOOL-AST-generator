@@ -172,7 +172,7 @@ class ASTGenSuite(unittest.TestCase):
                             s := new Triangle(3,4);
                         }
                     }"""
-        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NullLiteral()))],[AssignStmt(Id(s),NewExpr(Id(Rectangle),[IntLit(3),IntLit(4)])),AssignStmt(Id(s),NewExpr(Id(Triangle),[IntLit(3),IntLit(4)]))]))])])"
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)))],[AssignStmt(Id(s),NewExpr(Id(Rectangle),[IntLit(3),IntLit(4)])),AssignStmt(Id(s),NewExpr(Id(Triangle),[IntLit(3),IntLit(4)]))]))])])"
         self.assertTrue(TestAST.test(input,expect,314))
 
 
@@ -182,7 +182,7 @@ class ASTGenSuite(unittest.TestCase):
                             Shape s = new Shape(5, height := 10)
                         }
                     }"""
-        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),AssignStmt(Id(height),IntLit(10))])))],[]))])])"
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),AssignStmt(Id(height),IntLit(10))]))],[]))])])"
         self.assertTrue(TestAST.test(input,expect,315))
 
 
@@ -192,7 +192,7 @@ class ASTGenSuite(unittest.TestCase):
                             Shape s =  new Triangle();
                         }
                     }"""
-        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Triangle),[NullLiteral()])))],[]))])])"
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Triangle),[]))],[]))])])"
         self.assertTrue(TestAST.test(input,expect,316))
 
 
@@ -212,12 +212,12 @@ class ASTGenSuite(unittest.TestCase):
         input = """class test {
                         void main(){
                             if flag then
-                                io.writeStrLn(“Expression is true”);
+                                io.writeStrLn("Expression is true");
                             else
-                                io.writeStrLn (“Expression is false”);
+                                io.writeStrLn ("Expression is false");
                         }
                     }"""
-        expect = ""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[If(Id(flag),Call(Id(io),Id(writeStrLn),[StringLit(Expression is true)]),Call(Id(io),Id(writeStrLn),[StringLit(Expression is false)]))]))])])"
         self.assertTrue(TestAST.test(input,expect,318))
 
 
@@ -231,7 +231,7 @@ class ASTGenSuite(unittest.TestCase):
                             a[0]:= s;
                         }
                     }"""
-        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([AttributeDecl(Instance,VarDecl(Id(r),FloatType)),AttributeDecl(Instance,VarDecl(Id(s),FloatType)),AttributeDecl(Instance,VarDecl(Id(a),ArrayType(5,IntType))),AttributeDecl(Instance,VarDecl(Id(b),ArrayType(5,IntType)))],[AssignStmt(Id(r),FloatLit(2.0)),AssignStmt(Id(s),BinaryOp(*,BinaryOp(*,Id(r),Id(r)),FieldAccess(Self(),Id(myPI)))),AssignStmt(ArrayCell(Id(a),IntLit(0)),Id(s))]))])])"
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(r),FloatType),VarDecl(Id(s),FloatType),VarDecl(Id(a),ArrayType(5,IntType)),VarDecl(Id(b),ArrayType(5,IntType))],[AssignStmt(Id(r),FloatLit(2.0)),AssignStmt(Id(s),BinaryOp(*,BinaryOp(*,Id(r),Id(r)),FieldAccess(Self(),Id(myPI)))),AssignStmt(ArrayCell(Id(a),IntLit(0)),Id(s))]))])])"
         self.assertTrue(TestAST.test(input,expect,319))
 
 
