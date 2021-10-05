@@ -35,7 +35,7 @@ class ASTGeneration(BKOOLVisitor):
             typ = StringType()
         elif ctx.objTyp():
             typ = ctx.objTyp().accept(self)
-        return ArrayType(ctx.INT_LIT().getText(), typ)
+        return ArrayType(IntLiteral(ctx.INT_LIT().getText()), typ)
 
 
     def visitClassDecl(self, ctx:BKOOLParser.ClassDeclContext):
@@ -107,7 +107,7 @@ class ASTGeneration(BKOOLVisitor):
 
     def visitImmuInit(self, ctx:BKOOLParser.ImmuInitContext):
         #immuInit: EQUAL_SIGN exp;
-        return ctx.exp().accept(self) if ctx.exp() else None
+        return ctx.exp().accept(self)
 
 
     def visitObjAttribute(self, ctx:BKOOLParser.ObjAttributeContext):
@@ -275,7 +275,7 @@ class ASTGeneration(BKOOLVisitor):
     def visitExp2(self, ctx:BKOOLParser.Exp2Context):
         #exp2: exp2 (AND | OR) exp3 | exp3;
         if ctx.getChildCount() == 3:
-            return BinaryOp("AND" if ctx.AND() else "OR",
+            return BinaryOp("&&" if ctx.AND() else "||",
                             ctx.exp2().accept(self),
                             ctx.exp3().accept(self))
         else:
@@ -372,19 +372,17 @@ class ASTGeneration(BKOOLVisitor):
 
 
     def visitExp11(self, ctx:BKOOLParser.Exp11Context):
-        #exp11: atom | method_invo | asmStmt;
+        #exp11: atom | method_invo;
         if ctx.atom():
             return ctx.atom().accept(self)
         elif ctx.method_invo():
             return ctx.method_invo().accept(self)
-        elif ctx.asmStmt():
-            return ctx.asmStmt().accept(self)
 
 
     def visitAtom(self, ctx:BKOOLParser.AtomContext):
-        #atom: LB expList RB | literal | THIS | ID;
-        if ctx.expList():
-            return ctx.expList().accept(self)
+        #atom: LB exp RB | literal | THIS | ID;
+        if ctx.getChildCount() == 3:
+            return ctx.exp().accept(self)
         elif ctx.literal():
             return ctx.literal().accept(self)
         elif ctx.THIS():
@@ -605,12 +603,11 @@ class ASTGeneration(BKOOLVisitor):
     def visitArr_lit(self, ctx:BKOOLParser.Arr_litContext):
         #arr_lit: LP arr_value (COMMA arr_value)* RP;
         result = []
+        result.append(ctx.arr_value(0).accept(self))
         if ctx.COMMA():
             size = len(ctx.COMMA())
-            for i in range(0,size+1):
-                result += [(ctx.arr_value(i).accept(self))]
-        else:
-            result += [(ctx.arr_value(0).accept(self))]
+            for i in range(1,size+1):
+                result.append(ctx.arr_value(i).accept(self))
         return ArrayLiteral(result)
 
 
@@ -624,4 +621,3 @@ class ASTGeneration(BKOOLVisitor):
             return BooleanLiteral(ctx.bool_lit().accept(self))
         elif ctx.STRING_LIT():
             return StringLiteral(ctx.STRING_LIT().getText())
-        

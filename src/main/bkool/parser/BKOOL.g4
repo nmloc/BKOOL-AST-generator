@@ -74,9 +74,9 @@ exp7: (ADDOP | SUBOP) exp7 											| exp8;
 exp8: exp8 LSB exp8 RSB 											| exp9;
 exp9: exp9 DOT exp10 expListWithBrackets? 							| exp10;
 exp10: NEW exp10 LB expList? RB 									| exp11;
-exp11: atom | method_invo | asmStmt;
+exp11: atom | method_invo;
 
-atom: LB expList RB | literal | THIS | ID;
+atom: LB exp RB | literal | THIS | ID;
 expList: (exp (COMMA exp)*);
 expListWithBrackets: (LB (exp (COMMA exp)*)? RB);
 
