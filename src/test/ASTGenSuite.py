@@ -272,11 +272,12 @@ class ASTGenSuite(unittest.TestCase):
 
     def test_23(self):
         input = """class test {
-                        void main(){
-                            return a;
+                        int foo(){
+                            return abcd;
                         }
-                    }"""
-        expect = ""
+                    }
+                """
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(foo),Instance,[],IntType,Block([],[Return(Id(abcd))]))])])"
         self.assertTrue(TestAST.test(input,expect,323))
 
 
@@ -295,10 +296,18 @@ class ASTGenSuite(unittest.TestCase):
         self.assertTrue(TestAST.test(input,expect,324))
 
 
-    # def test_25(self):
-    #     input = """"""
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,325))
+    def test_25(self):
+        input = """class test {
+                    Shape nah;
+                    test() {
+                        Shape s;
+                        int x;
+                        float y;
+                    }
+        
+            }"""
+        expect = 'Program([ClassDecl(Id(test),[AttributeDecl(Instance,VarDecl(Id(nah),ClassType(Id(Shape)))),MethodDecl(Id("<init>"),Instance,[],Block([VarDecl(Id(s),ClassType(Id(Shape))),VarDecl(Id(x),IntType,NullLiteral()),VarDecl(Id(y),FloatType,NullLiteral())],[]))])])'
+        self.assertTrue(TestAST.test(input,expect,325))
 
 
     # def test_26(self):

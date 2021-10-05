@@ -157,7 +157,7 @@ def serializedATN():
         buf.write("\3\2\2\2\u010a#\3\2\2\2\u010b\u0109\3\2\2\2\u010c\u010d")
         buf.write("\5\n\6\2\u010d\u010f\7\60\2\2\u010e\u0110\5 \21\2\u010f")
         buf.write("\u010e\3\2\2\2\u010f\u0110\3\2\2\2\u0110\u0111\3\2\2\2")
-        buf.write("\u0111\u0112\7\61\2\2\u0112\u0113\5\\/\2\u0113%\3\2\2")
+        buf.write("\u0111\u0112\7\61\2\2\u0112\u0113\5^\60\2\u0113%\3\2\2")
         buf.write("\2\u0114\u0116\7\32\2\2\u0115\u0114\3\2\2\2\u0115\u0116")
         buf.write("\3\2\2\2\u0116\u0117\3\2\2\2\u0117\u0118\7\t\2\2\u0118")
         buf.write("\u0119\7\3\2\2\u0119\u011a\7\60\2\2\u011a\u011b\7\61\2")
@@ -175,7 +175,7 @@ def serializedATN():
         buf.write("\u012f\3\2\2\2\u0131\u0130\3\2\2\2\u0132+\3\2\2\2\u0133")
         buf.write("\u013b\5`\61\2\u0134\u013b\5d\63\2\u0135\u013b\5f\64\2")
         buf.write("\u0136\u013b\5h\65\2\u0137\u013b\5j\66\2\u0138\u013b\5")
-        buf.write("n8\2\u0139\u013b\5Z.\2\u013a\u0133\3\2\2\2\u013a\u0134")
+        buf.write("n8\2\u0139\u013b\5\\/\2\u013a\u0133\3\2\2\2\u013a\u0134")
         buf.write("\3\2\2\2\u013a\u0135\3\2\2\2\u013a\u0136\3\2\2\2\u013a")
         buf.write("\u0137\3\2\2\2\u013a\u0138\3\2\2\2\u013a\u0139\3\2\2\2")
         buf.write("\u013b-\3\2\2\2\u013c\u013d\b\30\1\2\u013d\u013e\5\60")
@@ -1620,8 +1620,8 @@ class BKOOLParser ( Parser ):
         def RB(self):
             return self.getToken(BKOOLParser.RB, 0)
 
-        def stmtBlock_wo_return(self):
-            return self.getTypedRuleContext(BKOOLParser.StmtBlock_wo_returnContext,0)
+        def stmtBlock_constructor(self):
+            return self.getTypedRuleContext(BKOOLParser.StmtBlock_constructorContext,0)
 
 
         def paraList(self):
@@ -1656,7 +1656,7 @@ class BKOOLParser ( Parser ):
             self.state = 271
             self.match(BKOOLParser.RB)
             self.state = 272
-            self.stmtBlock_wo_return()
+            self.stmtBlock_constructor()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1945,8 +1945,8 @@ class BKOOLParser ( Parser ):
             return self.getTypedRuleContext(BKOOLParser.Method_invoContext,0)
 
 
-        def stmtBlock(self):
-            return self.getTypedRuleContext(BKOOLParser.StmtBlockContext,0)
+        def stmtBlock_wo_return(self):
+            return self.getTypedRuleContext(BKOOLParser.StmtBlock_wo_returnContext,0)
 
 
         def getRuleIndex(self):
@@ -2002,7 +2002,7 @@ class BKOOLParser ( Parser ):
             elif la_ == 7:
                 self.enterOuterAlt(localctx, 7)
                 self.state = 311
-                self.stmtBlock()
+                self.stmtBlock_wo_return()
                 pass
 
 

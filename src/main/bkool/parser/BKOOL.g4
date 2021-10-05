@@ -38,7 +38,7 @@ paraList: paraInit (SEMI paraInit)*;
 paraInit: typ ID (COMMA ID)*;
 
 //special method
-constructor: className LB paraList? RB stmtBlock_wo_return;
+constructor: className LB paraList? RB stmtBlock_constructor;
 mainMethod: STATIC? VOID 'main' LB RB stmtBlock_wo_return;
 voidMethod: STATIC? VOID ID LB paraList? RB stmtBlock_wo_return;
 
@@ -60,7 +60,7 @@ stmt_wo_return: asmStmt
 			  | breakStmt
 			  | continueStmt
 			  | method_invo
-			  | stmtBlock
+			  | stmtBlock_wo_return
 			  ;
 
 exp: exp (LESS | GREATER | LESS_OR_EQUAL | GREATER_OR_EQUAL) exp	| exp1;

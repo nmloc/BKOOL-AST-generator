@@ -1,13 +1,9 @@
-class Example1 
-        {
-            int factorial(int n)
-            {
-                if n == 0 then return 1; else return n * this.factorial(n - 1);
-            }
-            void main()
-            {
-                int x;
-                x := io.readInt();
-                io.writeIntLn(this.factorial(x));
-            }
+class test {
+                    Shape nah;
+                    test() {
+                        Shape s;
+                        int x;
+                        float y;
+                    }
         
+            }

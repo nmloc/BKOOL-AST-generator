@@ -170,13 +170,13 @@ class ASTGeneration(BKOOLVisitor):
 
 
     def visitConstructor(self, ctx:BKOOLParser.ConstructorContext):
-        #constructor: className LB paraList? RB stmtBlock_wo_return;
+        #constructor: className LB paraList? RB stmtBlock_constructor;
         result = ""
         result += str(MethodDecl(Instance(),
                                 Id('"<init>"'),
                                 ctx.paraList().accept(self) if ctx.paraList() else [],
                                 None,
-                                ctx.stmtBlock_wo_return().accept(self)))
+                                ctx.stmtBlock_constructor().accept(self)))
         return result
 
 
@@ -235,8 +235,8 @@ class ASTGeneration(BKOOLVisitor):
             return ctx.continueStmt().accept(self)
         elif ctx.method_invo():
             return ctx.method_invo().accept(self)
-        elif ctx.stmtBlock():
-            return ctx.stmtBlock().accept(self)
+        elif ctx.stmtBlock_wo_return():
+            return ctx.stmtBlock_wo_return().accept(self)
 
 
     def visitExp(self, ctx:BKOOLParser.ExpContext):

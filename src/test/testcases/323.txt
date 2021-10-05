@@ -1,5 +1,6 @@
 class test {
-                        void main(){
-                            return a;
+                        int foo(){
+                            return abcd;
                         }
                     }
+                

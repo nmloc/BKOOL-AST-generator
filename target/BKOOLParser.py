@@ -157,7 +157,7 @@ def serializedATN():
         buf.write("\3\2\2\2\u010a#\3\2\2\2\u010b\u0109\3\2\2\2\u010c\u010d")
         buf.write("\5\n\6\2\u010d\u010f\7\60\2\2\u010e\u0110\5 \21\2\u010f")
         buf.write("\u010e\3\2\2\2\u010f\u0110\3\2\2\2\u0110\u0111\3\2\2\2")
-        buf.write("\u0111\u0112\7\61\2\2\u0112\u0113\5\\/\2\u0113%\3\2\2")
+        buf.write("\u0111\u0112\7\61\2\2\u0112\u0113\5^\60\2\u0113%\3\2\2")
         buf.write("\2\u0114\u0116\7\32\2\2\u0115\u0114\3\2\2\2\u0115\u0116")
         buf.write("\3\2\2\2\u0116\u0117\3\2\2\2\u0117\u0118\7\t\2\2\u0118")
         buf.write("\u0119\7\3\2\2\u0119\u011a\7\60\2\2\u011a\u011b\7\61\2")
@@ -1740,8 +1740,8 @@ class BKOOLParser ( Parser ):
         def RB(self):
             return self.getToken(BKOOLParser.RB, 0)
 
-        def stmtBlock_wo_return(self):
-            return self.getTypedRuleContext(BKOOLParser.StmtBlock_wo_returnContext,0)
+        def stmtBlock_constructor(self):
+            return self.getTypedRuleContext(BKOOLParser.StmtBlock_constructorContext,0)
 
 
         def paraList(self):
@@ -1782,7 +1782,7 @@ class BKOOLParser ( Parser ):
             self.state = 271
             self.match(BKOOLParser.RB)
             self.state = 272
-            self.stmtBlock_wo_return()
+            self.stmtBlock_constructor()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
