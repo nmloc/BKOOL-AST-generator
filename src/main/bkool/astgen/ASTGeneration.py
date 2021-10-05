@@ -57,13 +57,12 @@ class ASTGeneration(BKOOLVisitor):
             return ctx.attributeDecl().accept(self)
         elif ctx.methodDecl():
             return ctx.methodDecl().accept(self)
-        elif ctx.constructor():
-            return ctx.constructor().accept(self)
         elif ctx.mainMethod():
             return ctx.mainMethod().accept(self)
         elif ctx.voidMethod():
             return ctx.voidMethod().accept(self)
-
+        elif ctx.constructor():
+            return ctx.constructor().accept(self)
 
     def visitAttributeDecl(self, ctx:BKOOLParser.AttributeDeclContext):
         #attributeDecl: mutableAttribute | immutableAttribute | objAttribute;
@@ -172,17 +171,6 @@ class ASTGeneration(BKOOLVisitor):
         return paraInit
 
 
-    def visitConstructor(self, ctx:BKOOLParser.ConstructorContext):
-        #constructor: className LB paraList? RB stmtBlock_constructor;
-        result = ""
-        result += str(MethodDecl(Instance(),
-                                Id('"<init>"'),
-                                ctx.paraList().accept(self) if ctx.paraList() else [],
-                                None,
-                                ctx.stmtBlock_constructor().accept(self)))
-        return result
-
-
     def visitMainMethod(self, ctx:BKOOLParser.MainMethodContext):
         #mainMethod: STATIC? VOID 'main' LB RB stmtBlock_wo_return;
         result = ""
@@ -203,6 +191,17 @@ class ASTGeneration(BKOOLVisitor):
                                 ctx.paraList().accept(self) if ctx.paraList() else [],
                                 VoidType(),
                                 ctx.stmtBlock_wo_return().accept(self)))
+        return result
+
+
+    def visitConstructor(self, ctx:BKOOLParser.ConstructorContext):
+        #constructor: className LB paraList? RB stmtBlock_constructor;
+        result = ""
+        result += str(MethodDecl(Instance(),
+                                Id('"<init>"'),
+                                ctx.paraList().accept(self) if ctx.paraList() else [],
+                                None,
+                                ctx.stmtBlock_constructor().accept(self)))
         return result
 
 
@@ -412,7 +411,7 @@ class ASTGeneration(BKOOLVisitor):
             if ctx.COMMA():
                 size = len(ctx.COMMA())
                 for i in range(1, size+1):
-                    result.extend(ctx.exp(i).accept(self))
+                    result.append(ctx.exp(i).accept(self))
             return result
         else:
             return []

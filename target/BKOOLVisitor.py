@@ -94,11 +94,6 @@ class BKOOLVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by BKOOLParser#constructor.
-    def visitConstructor(self, ctx:BKOOLParser.ConstructorContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by BKOOLParser#mainMethod.
     def visitMainMethod(self, ctx:BKOOLParser.MainMethodContext):
         return self.visitChildren(ctx)
@@ -106,6 +101,11 @@ class BKOOLVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by BKOOLParser#voidMethod.
     def visitVoidMethod(self, ctx:BKOOLParser.VoidMethodContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by BKOOLParser#constructor.
+    def visitConstructor(self, ctx:BKOOLParser.ConstructorContext):
         return self.visitChildren(ctx)
 
 

@@ -3,11 +3,6 @@ from TestUtils import TestAST
 from AST import *
 class ASTGenSuite(unittest.TestCase):
 
-    # def test_(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,3))
-
     def test_1(self):
         input = """class loc {}"""
         expect = "Program([ClassDecl(Id(loc),[])])"
@@ -161,7 +156,7 @@ class ASTGenSuite(unittest.TestCase):
     def test_15(self):
         input = """class test {
                         void main(){
-                            Shape s = new Shape(5, 10)
+                            Shape s = new Shape(5, 10);
                         }
                     }"""
         expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),IntLit(10)]))],[]))])])"
@@ -556,40 +551,148 @@ class TestFish {
         self.assertTrue(TestAST.test(input,expect,344))
     
 
-    # def test_45(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,345))
-    
+    def test_45(self):
+        input = """
+        class a extends b 
+        {
+            final int c = daaaaaa != 5;
+            int cactus;
+            void kori() 
+            {
+                int x;
+                final float x = 1.224;
+                b := this.call(leftRecursive, rightRecursive);
+            }
+            void main() 
+            {
+                for x := 1 downto -1 do
+                {
+                    x := x + 5;
+                }
+            }
+        }"""
+        expect = """Program([ClassDecl(Id(a),Id(b),[AttributeDecl(Instance,ConstDecl(Id(c),IntType,BinaryOp(!=,Id(daaaaaa),IntLit(5)))),AttributeDecl(Instance,VarDecl(Id(cactus),IntType)),MethodDecl(Id(kori),Instance,[],VoidType,Block([VarDecl(Id(x),IntType),ConstDecl(Id(x),FloatType,FloatLit(1.224))],[AssignStmt(Id(b),CallExpr(Self(),Id(call),[Id(leftRecursive),Id(rightRecursive)]))])),MethodDecl(Id(main),Static,[],VoidType,Block([],[For(Id(x),IntLit(1),UnaryOp(-,IntLit(1)),False,Block([],[AssignStmt(Id(x),BinaryOp(+,Id(x),IntLit(5)))])])]))])])""" 
+        self.assertTrue(TestAST.test(input,expect,345))
 
-    # def test_46(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,346))
-    
 
-    # def test_47(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,347))
-    
+    def test_46(self):
+        input = """class Understandable extends Have_A_Nice_Day {
+                void Void() {}
+            }"""
+        expect = """Program([ClassDecl(Id(Understandable),Id(Have_A_Nice_Day),[MethodDecl(Id(Void),Instance,[],VoidType,Block([],[]))])])"""
+        self.assertTrue(TestAST.test(input,expect,346))
+        
 
-    # def test_48(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,348))
-    
+    def test_47(self):
+        input = """ 
+        class Point 
+        {
+            int x, y;
+            static float length(Point a; Point b) 
+            {
+                return Math.sqrt(Math.sqr(a.x - b.x) - (a.y - b.y));
+            }
+        }
+        class Triangle 
+        {
+            Point point1, point2, point3;
+            float edge1, edge2, edge3;
+            Triangle(Point p1; Point p2; Point p3) 
+            {
+                this.point1 := p1;
+                this.point2 := p2;
+                this.point3 := p3;
+                this.edge1 := Point.length(p1, p2);
+                this.edge2 := Point.length(p2, p3);
+                this.edge3 := Point.length(p3, p1);
+            }
+            float circumference() 
+            {
+                return (this.edge1 + this.edge2 + this.edge3) / 2;
+            }
+            float area() 
+            {
+                float p;
+                p := this.circumference();
+                return Math.sqrt(p * (p - this.edge1) * (p - this.edge2) * (p - this.edge3));
+            }
+        } 
+        class Program
+        {
+            void main() 
+            {
+                Point p1, p2, p3;
+                Triangle abc;
+                float area;
+                p1 := new Point(0, 0);
+                p2 := new Point(0, 1);
+                p3 := new Point(1, 0);
+                abc := new Triangle(p1, p2, p3);
+                area := abc.area();
+                io.writeLn("Area of triangle: ", area);
+            }
+        } 
+        """
+        expect = """Program([ClassDecl(Id(Point),[AttributeDecl(Instance,VarDecl(Id(x),IntType)),AttributeDecl(Instance,VarDecl(Id(y),IntType)),MethodDecl(Id(length),Static,[param(Id(a),ClassType(Id(Point))),param(Id(b),ClassType(Id(Point)))],FloatType,Block([],[Return(CallExpr(Id(Math),Id(sqrt),[BinaryOp(-,CallExpr(Id(Math),Id(sqr),[BinaryOp(-,FieldAccess(Id(a),Id(x)),FieldAccess(Id(b),Id(x)))]),BinaryOp(-,FieldAccess(Id(a),Id(y)),FieldAccess(Id(b),Id(y))))]))]))]),ClassDecl(Id(Triangle),[AttributeDecl(Instance,VarDecl(Id(point1),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(point2),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(point3),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(edge1),FloatType)),AttributeDecl(Instance,VarDecl(Id(edge2),FloatType)),AttributeDecl(Instance,VarDecl(Id(edge3),FloatType)),MethodDecl(Id("<init>"),Instance,[param(Id(p1),ClassType(Id(Point))),param(Id(p2),ClassType(Id(Point))),param(Id(p3),ClassType(Id(Point)))],Block([],[AssignStmt(FieldAccess(Id(this),Id(point1)),Id(p1)),AssignStmt(FieldAccess(Id(this),Id(point2)),Id(p2)),AssignStmt(FieldAccess(Id(this),Id(point3)),Id(p3)),AssignStmt(FieldAccess(Id(this),Id(edge1)),CallExpr(Id(Point),Id(length),[Id(p1),Id(p2)])),AssignStmt(FieldAccess(Id(this),Id(edge2)),CallExpr(Id(Point),Id(length),[Id(p2),Id(p3)])),AssignStmt(FieldAccess(Id(this),Id(edge3)),CallExpr(Id(Point),Id(length),[Id(p3),Id(p1)]))])),MethodDecl(Id(circumference),Instance,[],FloatType,Block([],[Return(BinaryOp(/,BinaryOp(+,BinaryOp(+,FieldAccess(Self(),Id(edge1)),FieldAccess(Self(),Id(edge2))),FieldAccess(Self(),Id(edge3))),IntLit(2)))])),MethodDecl(Id(area),Instance,[],FloatType,Block([VarDecl(Id(p),FloatType)],[AssignStmt(Id(p),CallExpr(Self(),Id(circumference),[])),Return(CallExpr(Id(Math),Id(sqrt),[BinaryOp(*,BinaryOp(*,BinaryOp(*,Id(p),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge1)))),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge2)))),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge3))))]))]))]),ClassDecl(Id(Program),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(p1),ClassType(Id(Point))),VarDecl(Id(p2),ClassType(Id(Point))),VarDecl(Id(p3),ClassType(Id(Point))),VarDecl(Id(abc),ClassType(Id(Triangle))),VarDecl(Id(area),FloatType)],[AssignStmt(Id(p1),NewExpr(Id(Point),[IntLit(0),IntLit(0)])),AssignStmt(Id(p2),NewExpr(Id(Point),[IntLit(0),IntLit(1)])),AssignStmt(Id(p3),NewExpr(Id(Point),[IntLit(1),IntLit(0)])),AssignStmt(Id(abc),NewExpr(Id(Triangle),[Id(p1),Id(p2),Id(p3)])),AssignStmt(Id(area),CallExpr(Id(abc),Id(area),[])),Call(Id(io),Id(writeLn),[StringLit(Area of triangle: ),Id(area)])]))])])"""
+        self.assertTrue(TestAST.test(input,expect,347))
 
-    # def test_49(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,349))
-    
 
-    # def test_50(self):
-    #     input = """ """
-    #     expect = ""
-    #     self.assertTrue(TestAST.test(input,expect,350))
+    def test_48(self):
+        input = """
+        class Phuong 
+        {
+            int x;
+            {
+                int x;
+                {
+                    int x = 10;
+                    {
+                        final int x = 10;
+                        {
+                            final float x = 4.12342421312312e-234125;
+                        }
+                    }
+                }
+            }
+        }"""
+        expect = """Program([ClassDecl(Id(Phuong),[AttributeDecl(Instance,VarDecl(Id(x),IntType)),AttributeDecl(Instance,VarDecl(Id(x),IntType)),AttributeDecl(Instance,VarDecl(Id(x),IntType,IntLit(10))),AttributeDecl(Instance,ConstDecl(Id(x),IntType,IntLit(10))),AttributeDecl(Instance,ConstDecl(Id(x),FloatType,FloatLit(0.0)))])])"""
+        self.assertTrue(TestAST.test(input,expect,348))
+
+
+    def test_49(self):
+        input = """
+        class Shape 
+        {
+            Shape() 
+            {
+                int width, height;
+                float pi = 314e-2;
+            }
+        }
+        """
+        expect = """Program([ClassDecl(Id(Shape),[MethodDecl(Id("<init>"),Instance,[],Block([VarDecl(Id(width),IntType,NullLiteral()),VarDecl(Id(height),IntType,NullLiteral()),VarDecl(Id(pi),FloatType,FloatLit(3.14))],[]))])])"""
+        self.assertTrue(TestAST.test(input,expect,349))
+    
+    def test_50(self):
+        input = """
+        class Shape 
+        {
+            void main() 
+            {
+                {
+                    {
+                        {
+                            {
+                                evil := bad;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        """
+        expect = "Program([ClassDecl(Id(Shape),[MethodDecl(Id(main),Static,[],VoidType,Block([],[Block([],[Block([],[Block([],[Block([],[AssignStmt(Id(evil),Id(bad))])])])])]))])])"
+        self.assertTrue(TestAST.test(input,expect,350))
 
     def test_51(self):
         input = """class kori extends phuong 
@@ -601,24 +704,24 @@ class TestFish {
             {
                 a := 2;
                 a.b := 5;
-                for x := 5 to 10 do
+                for x := 5; to 10 do
                     x := x + 5;
             }
             int okay() 
             {
                 a := 2;
                 a.b := 5;
-                for x := 5 to 10 do
+                for x := 5; to 10 do
                 {
                     break;
                     if a + b == 5 then 
                         a := b;
                     continue;
-                    return (x < 5);
+                    return x == y;
                 }
             }
         }"""
-        expect = """Program([ClassDecl(Id(kori),Id(phuong),[MethodDecl(Id("<init>"),Instance,[],Block([],[])),MethodDecl(Id(count),Instance,[param(Id(a),IntType),param(Id(b),ClassType(Shape)),param(Id(c),StringType),param(Id(d),StringType),param(Id(e),StringType)],IntType,Block([],[])),MethodDecl(Id(getFloatArray),Instance,[],ArrayType(5,FloatType),Block([],[])),MethodDecl(Id(main),Static,[],VoidType,Block([],[AssignStmt(Id(a),IntLit(2)),AssignStmt(FieldAccess(Id(a),Id(b)),IntLit(5)),For(Id(x),IntLit(5),IntLit(10),True,AssignStmt(Id(x),BinaryOp(+,Id(x),IntLit(5)))])])),MethodDecl(Id(okay),Instance,[],IntType,Block([],[AssignStmt(Id(a),IntLit(2)),AssignStmt(FieldAccess(Id(a),Id(b)),IntLit(5)),For(Id(x),IntLit(5),IntLit(10),True,Block([],[Break,If(BinaryOp(==,BinaryOp(+,Id(a),Id(b)),IntLit(5)),AssignStmt(Id(a),Id(b))),Continue,Return(BinaryOp(<,Id(x),IntLit(5)))])])]))])])"""
+        expect = """Program([ClassDecl(Id(kori),Id(phuong),[MethodDecl(Id("<init>"),Instance,[],Block([],[])),MethodDecl(Id(count),Instance,[param(Id(a),IntType),param(Id(b),ClassType(Id(Shape))),param(Id(c),StringType),param(Id(d),StringType),param(Id(e),StringType)],IntType,Block([],[])),MethodDecl(Id(getFloatArray),Instance,[],ArrayType(5,FloatType),Block([],[])),MethodDecl(Id(main),Static,[],VoidType,Block([],[AssignStmt(Id(a),IntLit(2)),AssignStmt(FieldAccess(Id(a),Id(b)),IntLit(5)),For(Id(x),IntLit(5),IntLit(10),True,AssignStmt(Id(x),BinaryOp(+,Id(x),IntLit(5)))])])),MethodDecl(Id(okay),Instance,[],IntType,Block([],[AssignStmt(Id(a),IntLit(2)),AssignStmt(FieldAccess(Id(a),Id(b)),IntLit(5)),For(Id(x),IntLit(5),IntLit(10),True,Block([],[Break,If(BinaryOp(==,BinaryOp(+,Id(a),Id(b)),IntLit(5)),AssignStmt(Id(a),Id(b))),Continue,Return(BinaryOp(==,Id(x),Id(y)))])])]))])])"""
         self.assertTrue(TestAST.test(input,expect,351))
 
 
@@ -646,9 +749,9 @@ class TestFish {
         input = """
         class a extends b 
         {
-            Shape s = new Shape(a, !b, 12, 25, -2.12314 \ c % 789138712841 + 5, false, "kori  phuonggggggg" ^ "hola", id, (this.pos[14/2+5*7] + 1 / 5));
+            Shape s = new Shape(a, !b, 12, 25,-2.12314 + c % 789138712841 + 5, false, "kori  phuonggggggg" ^ "hola", id, this.pos[14] + 1 / 5);
         }"""
-        expect = """Program([ClassDecl(Id(a),Id(b),[AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[Id(a),UnaryOp(!,Id(b)),IntLit(12),IntLit(25),BinaryOp(+,BinaryOp(%,BinaryOp(\,UnaryOp(-,FloatLit(2.12314)),Id(c)),IntLit(789138712841)),IntLit(5)),BooleanLit(True),BinaryOp(^,StringLit(kori  phuonggggggg),StringLit(hola)),Id(id),BinaryOp(+,ArrayCell(FieldAccess(Self(),Id(pos)),BinaryOp(+,BinaryOp(/,IntLit(14),IntLit(2)),BinaryOp(*,IntLit(5),IntLit(7)))),BinaryOp(/,IntLit(1),IntLit(5)))])))])])"""
+        expect = """Program([ClassDecl(Id(a),Id(b),[AttributeDecl(Instance,VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[Id(a),UnaryOp(!,Id(b)),IntLit(12),IntLit(25),BinaryOp(+,BinaryOp(+,UnaryOp(-,FloatLit(2.12314)),BinaryOp(%,Id(c),IntLit(789138712841))),IntLit(5)),BooleanLit(False),BinaryOp(^,StringLit(kori  phuonggggggg),StringLit(hola)),Id(id),BinaryOp(+,ArrayCell(FieldAccess(Self(),Id(pos)),IntLit(14)),BinaryOp(/,IntLit(1),IntLit(5)))])))])])"""
         self.assertTrue(TestAST.test(input,expect,353))
 
 
@@ -689,7 +792,7 @@ class TestFish {
         class Point 
         {
             int x, y;
-            static float length(Point a, Point b) 
+            static float length(Point a; Point b) 
             {
                 return Math.sqrt(Math.sqr(a.x - b.x) - (a.y - b.y));
             }
@@ -698,7 +801,8 @@ class TestFish {
         {
             Point point1, point2, point3;
             float edge1, edge2, edge3;
-            Triangle(Point p1, Point p2, Point p3) {
+            Triangle(Point p1; Point p2; Point p3) 
+            {
                 this.point1 := p1;
                 this.point2 := p2;
                 this.point3 := p3;
@@ -733,7 +837,7 @@ class TestFish {
             }
         } 
         """
-        expect = """Program([ClassDecl(Id(Point),[AttributeDecl(Instance,VarDecl(Id(x),IntType)),AttributeDecl(Instance,VarDecl(Id(y),IntType)),MethodDecl(Id(length),Static,[param(Id(a),ClassType(Point)),param(Id(b),ClassType(Point))],FloatType,Block([],[Return(CallExpr(Id(Math),Id(sqrt),[BinaryOp(-,CallExpr(Id(Math),Id(sqr),[BinaryOp(-,FieldAccess(Id(a),Id(x)),FieldAccess(Id(b),Id(x)))]),BinaryOp(-,FieldAccess(Id(a),Id(y)),FieldAccess(Id(b),Id(y))))]))]))]),ClassDecl(Id(Triangle),[AttributeDecl(Instance,VarDecl(Id(point1),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(point2),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(point3),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(edge1),FloatType)),AttributeDecl(Instance,VarDecl(Id(edge2),FloatType)),AttributeDecl(Instance,VarDecl(Id(edge3),FloatType)),MethodDecl(Id("<init>"),Instance,[param(Id(p1),ClassType(Point)),param(Id(p2),ClassType(Point)),param(Id(p3),ClassType(Point))],Block([],[AssignStmt(FieldAccess(Id(this),Id(point1)),Id(p1)),AssignStmt(FieldAccess(Id(this),Id(point2)),Id(p2)),AssignStmt(FieldAccess(Id(this),Id(point3)),Id(p3)),AssignStmt(FieldAccess(Id(this),Id(edge1)),CallExpr(Id(Point),Id(length),[Id(p1),Id(p2)])),AssignStmt(FieldAccess(Id(this),Id(edge2)),CallExpr(Id(Point),Id(length),[Id(p2),Id(p3)])),AssignStmt(FieldAccess(Id(this),Id(edge3)),CallExpr(Id(Point),Id(length),[Id(p3),Id(p1)]))])),MethodDecl(Id(circumference),Instance,[],FloatType,Block([],[Return(BinaryOp(/,BinaryOp(+,BinaryOp(+,FieldAccess(Self(),Id(edge1)),FieldAccess(Self(),Id(edge2))),FieldAccess(Self(),Id(edge3))),IntLit(2)))])),MethodDecl(Id(area),Instance,[],FloatType,Block([VarDecl(Id(p),FloatType)],[AssignStmt(Id(p),CallExpr(Self(),Id(circumference),[])),Return(CallExpr(Id(Math),Id(sqrt),[BinaryOp(*,BinaryOp(*,BinaryOp(*,Id(p),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge1)))),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge2)))),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge3))))]))]))]),ClassDecl(Id(Program),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(p1),ClassType(Id(Point))),VarDecl(Id(p2),ClassType(Id(Point))),VarDecl(Id(p3),ClassType(Id(Point))),VarDecl(Id(abc),ClassType(Id(Triangle))),VarDecl(Id(area),FloatType)],[AssignStmt(Id(p1),NewExpr(Id(Point),[IntLit(0),IntLit(0)])),AssignStmt(Id(p2),NewExpr(Id(Point),[IntLit(0),IntLit(1)])),AssignStmt(Id(p3),NewExpr(Id(Point),[IntLit(1),IntLit(0)])),AssignStmt(Id(abc),NewExpr(Id(Triangle),[Id(p1),Id(p2),Id(p3)])),AssignStmt(Id(area),CallExpr(Id(abc),Id(area),[])),Call(Id(io),Id(writeLn),[StringLit(Area of triangle: ),Id(area)])]))])])"""
+        expect = """Program([ClassDecl(Id(Point),[AttributeDecl(Instance,VarDecl(Id(x),IntType)),AttributeDecl(Instance,VarDecl(Id(y),IntType)),MethodDecl(Id(length),Static,[param(Id(a),ClassType(Id(Point))),param(Id(b),ClassType(Id(Point)))],FloatType,Block([],[Return(CallExpr(Id(Math),Id(sqrt),[BinaryOp(-,CallExpr(Id(Math),Id(sqr),[BinaryOp(-,FieldAccess(Id(a),Id(x)),FieldAccess(Id(b),Id(x)))]),BinaryOp(-,FieldAccess(Id(a),Id(y)),FieldAccess(Id(b),Id(y))))]))]))]),ClassDecl(Id(Triangle),[AttributeDecl(Instance,VarDecl(Id(point1),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(point2),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(point3),ClassType(Id(Point)))),AttributeDecl(Instance,VarDecl(Id(edge1),FloatType)),AttributeDecl(Instance,VarDecl(Id(edge2),FloatType)),AttributeDecl(Instance,VarDecl(Id(edge3),FloatType)),MethodDecl(Id("<init>"),Instance,[param(Id(p1),ClassType(Id(Point))),param(Id(p2),ClassType(Id(Point))),param(Id(p3),ClassType(Id(Point)))],Block([],[AssignStmt(FieldAccess(Id(this),Id(point1)),Id(p1)),AssignStmt(FieldAccess(Id(this),Id(point2)),Id(p2)),AssignStmt(FieldAccess(Id(this),Id(point3)),Id(p3)),AssignStmt(FieldAccess(Id(this),Id(edge1)),CallExpr(Id(Point),Id(length),[Id(p1),Id(p2)])),AssignStmt(FieldAccess(Id(this),Id(edge2)),CallExpr(Id(Point),Id(length),[Id(p2),Id(p3)])),AssignStmt(FieldAccess(Id(this),Id(edge3)),CallExpr(Id(Point),Id(length),[Id(p3),Id(p1)]))])),MethodDecl(Id(circumference),Instance,[],FloatType,Block([],[Return(BinaryOp(/,BinaryOp(+,BinaryOp(+,FieldAccess(Self(),Id(edge1)),FieldAccess(Self(),Id(edge2))),FieldAccess(Self(),Id(edge3))),IntLit(2)))])),MethodDecl(Id(area),Instance,[],FloatType,Block([VarDecl(Id(p),FloatType)],[AssignStmt(Id(p),CallExpr(Self(),Id(circumference),[])),Return(CallExpr(Id(Math),Id(sqrt),[BinaryOp(*,BinaryOp(*,BinaryOp(*,Id(p),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge1)))),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge2)))),BinaryOp(-,Id(p),FieldAccess(Self(),Id(edge3))))]))]))]),ClassDecl(Id(Program),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(p1),ClassType(Id(Point))),VarDecl(Id(p2),ClassType(Id(Point))),VarDecl(Id(p3),ClassType(Id(Point))),VarDecl(Id(abc),ClassType(Id(Triangle))),VarDecl(Id(area),FloatType)],[AssignStmt(Id(p1),NewExpr(Id(Point),[IntLit(0),IntLit(0)])),AssignStmt(Id(p2),NewExpr(Id(Point),[IntLit(0),IntLit(1)])),AssignStmt(Id(p3),NewExpr(Id(Point),[IntLit(1),IntLit(0)])),AssignStmt(Id(abc),NewExpr(Id(Triangle),[Id(p1),Id(p2),Id(p3)])),AssignStmt(Id(area),CallExpr(Id(abc),Id(area),[])),Call(Id(io),Id(writeLn),[StringLit(Area of triangle: ),Id(area)])]))])])"""
         self.assertTrue(TestAST.test(input,expect,356))
 
 
@@ -1066,3 +1170,201 @@ class TestFish {
         input = """class Main extends Extends {}"""
         expect = """Program([ClassDecl(Id(Main),Id(Extends),[])])"""
         self.assertTrue(TestAST.test(input,expect,384))
+
+
+    def test_85(self):
+        input = """class a {
+                    void test() {
+                        x.b[2] := x.m()[3];
+                    }
+        
+            }"""
+        expect = "Program([ClassDecl(Id(a),[MethodDecl(Id(test),Instance,[],VoidType,Block([],[AssignStmt(FieldAccess(Id(x),ArrayCell(Id(b),IntLit(2))),ArrayCell(CallExpr(Id(x),Id(m),[]),IntLit(3)))]))])])"
+        self.assertTrue(TestAST.test(input,expect,385))
+    
+
+    def test_86(self):
+        input = """class Shape {
+                    static final int numOfShape = 0;
+                    final int immuAttribute = 0;
+                    float length,width;
+                    static int getNumOfShape() {
+                        return numOfShape;
+                    }
+                }
+                class Rectangle extends Shape {
+                    float getArea(){
+                    return this.length*this.width;
+                }
+                }"""
+        expect = "Program([ClassDecl(Id(Shape),[AttributeDecl(Static,ConstDecl(Id(numOfShape),IntType,IntLit(0))),AttributeDecl(Instance,ConstDecl(Id(immuAttribute),IntType,IntLit(0))),AttributeDecl(Instance,VarDecl(Id(length),FloatType)),AttributeDecl(Instance,VarDecl(Id(width),FloatType)),MethodDecl(Id(getNumOfShape),Static,[],IntType,Block([],[Return(Id(numOfShape))]))]),ClassDecl(Id(Rectangle),Id(Shape),[MethodDecl(Id(getArea),Instance,[],FloatType,Block([],[Return(BinaryOp(*,FieldAccess(Self(),Id(length)),FieldAccess(Self(),Id(width))))]))])])"
+        self.assertTrue(TestAST.test(input,expect,386))
+
+    
+    def test_87(self):
+        input = """class Shape {
+                    static final int numOfShape = 0;
+                    final int immuAttribute = 0;
+                    float length,width;
+                    static int getNumOfShape() {
+                        return numOfShape;
+                    }
+                }
+                """
+        expect = "Program([ClassDecl(Id(Shape),[AttributeDecl(Static,ConstDecl(Id(numOfShape),IntType,IntLit(0))),AttributeDecl(Instance,ConstDecl(Id(immuAttribute),IntType,IntLit(0))),AttributeDecl(Instance,VarDecl(Id(length),FloatType)),AttributeDecl(Instance,VarDecl(Id(width),FloatType)),MethodDecl(Id(getNumOfShape),Static,[],IntType,Block([],[Return(Id(numOfShape))]))])])"
+        self.assertTrue(TestAST.test(input,expect,387))
+
+
+    def test_88(self):
+        input = """class Rectangle extends Shape {
+                    float getArea(){
+                    return this.length*this.width;
+                }"""
+        expect = "Program([ClassDecl(Id(Rectangle),Id(Shape),[MethodDecl(Id(getArea),Instance,[],FloatType,Block([],[Return(BinaryOp(*,FieldAccess(Self(),Id(length)),FieldAccess(Self(),Id(width))))]))])])"
+        self.assertTrue(TestAST.test(input,expect,388))
+    
+
+    def test_89(self):
+        input = """class test {
+                        void main(){
+                            Shape s;
+                            s := new Rectangle(3,4);
+                            s := new Triangle(3,4);
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)))],[AssignStmt(Id(s),NewExpr(Id(Rectangle),[IntLit(3),IntLit(4)])),AssignStmt(Id(s),NewExpr(Id(Triangle),[IntLit(3),IntLit(4)]))]))])])"
+        self.assertTrue(TestAST.test(input,expect,389))
+
+
+    def test_90(self):
+        input = """class test {
+                        void main(){
+                            Shape s = new Shape(5, 10);
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Shape),[IntLit(5),IntLit(10)]))],[]))])])"
+        self.assertTrue(TestAST.test(input,expect,390))
+
+
+    def test_91(self):
+        input = """class test {
+                        void main(){
+                            Shape s =  new Triangle();
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(s),ClassType(Id(Shape)),NewExpr(Id(Triangle),[]))],[]))])])"
+        self.assertTrue(TestAST.test(input,expect,391))
+
+
+    def test_92(self):
+        input = """class test {
+                        void main(){
+                            this.aPI := 3.14;
+                            value := x.foo(5);
+                            l[3] := value * 2;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[AssignStmt(FieldAccess(Id(this),Id(aPI)),FloatLit(3.14)),AssignStmt(Id(value),CallExpr(Id(x),Id(foo),[IntLit(5)])),AssignStmt(ArrayCell(Id(l),IntLit(3)),BinaryOp(*,Id(value),IntLit(2)))]))])])"
+        self.assertTrue(TestAST.test(input,expect,392))
+
+
+    def test_93(self):
+        input = """class test {
+                        void main(){
+                            if flag then
+                                io.writeStrLn("Expression is true");
+                            else
+                                io.writeStrLn ("Expression is false");
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[If(Id(flag),Call(Id(io),Id(writeStrLn),[StringLit(Expression is true)]),Call(Id(io),Id(writeStrLn),[StringLit(Expression is false)]))]))])])"
+        self.assertTrue(TestAST.test(input,expect,393))
+
+
+    def test_94(self):
+        input = """class test {
+                        void main(){
+                            float r,s;
+                            int[5] a,b;
+                            r:=2.0;
+                            s:=r*r*this.myPI;
+                            a[0]:= s;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(r),FloatType),VarDecl(Id(s),FloatType),VarDecl(Id(a),ArrayType(5,IntType)),VarDecl(Id(b),ArrayType(5,IntType))],[AssignStmt(Id(r),FloatLit(2.0)),AssignStmt(Id(s),BinaryOp(*,BinaryOp(*,Id(r),Id(r)),FieldAccess(Self(),Id(myPI)))),AssignStmt(ArrayCell(Id(a),IntLit(0)),Id(s))]))])])"
+        self.assertTrue(TestAST.test(input,expect,394))
+
+
+    def test_95(self):
+        input = """class test {
+                    Shape nah;
+                    test() {
+                        Shape s;
+                        int x;
+                        float y;
+                    }
+        
+            }"""
+        expect = 'Program([ClassDecl(Id(test),[AttributeDecl(Instance,VarDecl(Id(nah),ClassType(Id(Shape)))),MethodDecl(Id("<init>"),Instance,[],Block([VarDecl(Id(s),ClassType(Id(Shape)),NullLiteral()),VarDecl(Id(x),IntType,NullLiteral()),VarDecl(Id(y),FloatType,NullLiteral())],[]))])])'
+        self.assertTrue(TestAST.test(input,expect,395))
+
+
+    def test_96(self):
+        input = """class test {
+                        void main(){
+                            for i := 1 to 100 do {
+                                io.writeIntLn(i);
+                                Intarray[i] := i + 1;
+                            }
+                            for x := 5 downto 2 do
+                                io.writeIntLn(x);
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[For(Id(i),IntLit(1),IntLit(100),True,Block([],[Call(Id(io),Id(writeIntLn),[Id(i)]),AssignStmt(ArrayCell(Id(Intarray),Id(i)),BinaryOp(+,Id(i),IntLit(1)))])]),For(Id(x),IntLit(5),IntLit(2),False,Call(Id(io),Id(writeIntLn),[Id(x)])])]))])])"
+        self.assertTrue(TestAST.test(input,expect,396))
+
+
+    def test_97(self):
+        input = """class test {
+                        void main(){
+                            break;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[Break]))])])"
+        self.assertTrue(TestAST.test(input,expect,397))
+
+
+    def test_98(self):
+        input = """class test {
+                        void main(){
+                            continue;
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(main),Static,[],VoidType,Block([],[Continue]))])])"
+        self.assertTrue(TestAST.test(input,expect,398))
+
+
+    def test_99(self):
+        input = """class test {
+                        int foo(){
+                            return abcd;
+                        }
+                    }
+                """
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(foo),Instance,[],IntType,Block([],[Return(Id(abcd))]))])])"
+        self.assertTrue(TestAST.test(input,expect,399))
+
+
+    def test_100(self):
+        input = """class Example1 {
+                            int factorial(int n){
+                            if n == 0 then return 1; else return n * this.factorial(n - 1);
+                        }
+                        void main(){
+                            int x;
+                            x := io.readInt();
+                            io.writeIntLn(this.factorial(x));
+                        }
+                    }"""
+        expect = "Program([ClassDecl(Id(Example1),[MethodDecl(Id(factorial),Instance,[param(Id(n),IntType)],IntType,Block([],[If(BinaryOp(==,Id(n),IntLit(0)),Return(IntLit(1)),Return(BinaryOp(*,Id(n),CallExpr(Self(),Id(factorial),[BinaryOp(-,Id(n),IntLit(1))]))))])),MethodDecl(Id(main),Static,[],VoidType,Block([VarDecl(Id(x),IntType)],[AssignStmt(Id(x),CallExpr(Id(io),Id(readInt),[])),Call(Id(io),Id(writeIntLn),[CallExpr(Self(),Id(factorial),[Id(x)])])]))])])"
+        self.assertTrue(TestAST.test(input,expect,400))

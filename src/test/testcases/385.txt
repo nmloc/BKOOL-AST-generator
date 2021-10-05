@@ -1,1 +1,6 @@
-class Main extends Extends {}
+class a {
+                    void test() {
+                        x.b[2] := x.m()[3];
+                    }
+        
+            }

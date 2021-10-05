@@ -36,9 +36,9 @@ def serializedATN():
         buf.write("\n\20\3\20\3\20\3\20\3\20\5\20\u00f8\n\20\3\20\3\20\3")
         buf.write("\20\3\21\3\21\3\21\7\21\u0100\n\21\f\21\16\21\u0103\13")
         buf.write("\21\3\22\3\22\3\22\3\22\7\22\u0109\n\22\f\22\16\22\u010c")
-        buf.write("\13\22\3\23\3\23\3\23\5\23\u0111\n\23\3\23\3\23\3\23\3")
-        buf.write("\24\5\24\u0117\n\24\3\24\3\24\3\24\3\24\3\24\3\24\3\25")
-        buf.write("\5\25\u0120\n\25\3\25\3\25\3\25\3\25\5\25\u0126\n\25\3")
+        buf.write("\13\22\3\23\5\23\u010f\n\23\3\23\3\23\3\23\3\23\3\23\3")
+        buf.write("\23\3\24\5\24\u0118\n\24\3\24\3\24\3\24\3\24\5\24\u011e")
+        buf.write("\n\24\3\24\3\24\3\24\3\25\3\25\3\25\5\25\u0126\n\25\3")
         buf.write("\25\3\25\3\25\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
         buf.write("\5\26\u0133\n\26\3\27\3\27\3\27\3\27\3\27\3\27\3\27\5")
         buf.write("\27\u013c\n\27\3\30\3\30\3\30\3\30\3\30\3\30\7\30\u0144")
@@ -80,8 +80,8 @@ def serializedATN():
         buf.write("\2\16\u00ad\3\2\2\2\20\u00b0\3\2\2\2\22\u00c1\3\2\2\2")
         buf.write("\24\u00c8\3\2\2\2\26\u00d7\3\2\2\2\30\u00db\3\2\2\2\32")
         buf.write("\u00ea\3\2\2\2\34\u00ee\3\2\2\2\36\u00f1\3\2\2\2 \u00fc")
-        buf.write("\3\2\2\2\"\u0104\3\2\2\2$\u010d\3\2\2\2&\u0116\3\2\2\2")
-        buf.write("(\u011f\3\2\2\2*\u0132\3\2\2\2,\u013b\3\2\2\2.\u013d\3")
+        buf.write("\3\2\2\2\"\u0104\3\2\2\2$\u010e\3\2\2\2&\u0117\3\2\2\2")
+        buf.write("(\u0122\3\2\2\2*\u0132\3\2\2\2,\u013b\3\2\2\2.\u013d\3")
         buf.write("\2\2\2\60\u0148\3\2\2\2\62\u0153\3\2\2\2\64\u015e\3\2")
         buf.write("\2\2\66\u0169\3\2\2\28\u0174\3\2\2\2:\u0182\3\2\2\2<\u0187")
         buf.write("\3\2\2\2>\u0189\3\2\2\2@\u0196\3\2\2\2B\u01ad\3\2\2\2")
@@ -111,8 +111,8 @@ def serializedATN():
         buf.write("\u009a\3\2\2\2\u009c\u009d\3\2\2\2\u009d\u009f\3\2\2\2")
         buf.write("\u009e\u009c\3\2\2\2\u009f\u00a0\7\63\2\2\u00a0\t\3\2")
         buf.write("\2\2\u00a1\u00a2\7=\2\2\u00a2\13\3\2\2\2\u00a3\u00a9\5")
-        buf.write("\16\b\2\u00a4\u00a9\5\36\20\2\u00a5\u00a9\5$\23\2\u00a6")
-        buf.write("\u00a9\5&\24\2\u00a7\u00a9\5(\25\2\u00a8\u00a3\3\2\2\2")
+        buf.write("\16\b\2\u00a4\u00a9\5\36\20\2\u00a5\u00a9\5(\25\2\u00a6")
+        buf.write("\u00a9\5$\23\2\u00a7\u00a9\5&\24\2\u00a8\u00a3\3\2\2\2")
         buf.write("\u00a8\u00a4\3\2\2\2\u00a8\u00a5\3\2\2\2\u00a8\u00a6\3")
         buf.write("\2\2\2\u00a8\u00a7\3\2\2\2\u00a9\r\3\2\2\2\u00aa\u00ae")
         buf.write("\5\20\t\2\u00ab\u00ae\5\24\13\2\u00ac\u00ae\5\30\r\2\u00ad")
@@ -155,19 +155,19 @@ def serializedATN():
         buf.write("\u0101\3\2\2\2\u0104\u0105\5\4\3\2\u0105\u010a\7=\2\2")
         buf.write("\u0106\u0107\78\2\2\u0107\u0109\7=\2\2\u0108\u0106\3\2")
         buf.write("\2\2\u0109\u010c\3\2\2\2\u010a\u0108\3\2\2\2\u010a\u010b")
-        buf.write("\3\2\2\2\u010b#\3\2\2\2\u010c\u010a\3\2\2\2\u010d\u010e")
-        buf.write("\5\n\6\2\u010e\u0110\7\60\2\2\u010f\u0111\5 \21\2\u0110")
-        buf.write("\u010f\3\2\2\2\u0110\u0111\3\2\2\2\u0111\u0112\3\2\2\2")
-        buf.write("\u0112\u0113\7\61\2\2\u0113\u0114\5^\60\2\u0114%\3\2\2")
-        buf.write("\2\u0115\u0117\7\32\2\2\u0116\u0115\3\2\2\2\u0116\u0117")
-        buf.write("\3\2\2\2\u0117\u0118\3\2\2\2\u0118\u0119\7\t\2\2\u0119")
-        buf.write("\u011a\7\3\2\2\u011a\u011b\7\60\2\2\u011b\u011c\7\61\2")
-        buf.write("\2\u011c\u011d\5\\/\2\u011d\'\3\2\2\2\u011e\u0120\7\32")
-        buf.write("\2\2\u011f\u011e\3\2\2\2\u011f\u0120\3\2\2\2\u0120\u0121")
-        buf.write("\3\2\2\2\u0121\u0122\7\t\2\2\u0122\u0123\7=\2\2\u0123")
+        buf.write("\3\2\2\2\u010b#\3\2\2\2\u010c\u010a\3\2\2\2\u010d\u010f")
+        buf.write("\7\32\2\2\u010e\u010d\3\2\2\2\u010e\u010f\3\2\2\2\u010f")
+        buf.write("\u0110\3\2\2\2\u0110\u0111\7\t\2\2\u0111\u0112\7\3\2\2")
+        buf.write("\u0112\u0113\7\60\2\2\u0113\u0114\7\61\2\2\u0114\u0115")
+        buf.write("\5\\/\2\u0115%\3\2\2\2\u0116\u0118\7\32\2\2\u0117\u0116")
+        buf.write("\3\2\2\2\u0117\u0118\3\2\2\2\u0118\u0119\3\2\2\2\u0119")
+        buf.write("\u011a\7\t\2\2\u011a\u011b\7=\2\2\u011b\u011d\7\60\2\2")
+        buf.write("\u011c\u011e\5 \21\2\u011d\u011c\3\2\2\2\u011d\u011e\3")
+        buf.write("\2\2\2\u011e\u011f\3\2\2\2\u011f\u0120\7\61\2\2\u0120")
+        buf.write("\u0121\5\\/\2\u0121\'\3\2\2\2\u0122\u0123\5\n\6\2\u0123")
         buf.write("\u0125\7\60\2\2\u0124\u0126\5 \21\2\u0125\u0124\3\2\2")
         buf.write("\2\u0125\u0126\3\2\2\2\u0126\u0127\3\2\2\2\u0127\u0128")
-        buf.write("\7\61\2\2\u0128\u0129\5\\/\2\u0129)\3\2\2\2\u012a\u0133")
+        buf.write("\7\61\2\2\u0128\u0129\5^\60\2\u0129)\3\2\2\2\u012a\u0133")
         buf.write("\5`\61\2\u012b\u0133\5d\63\2\u012c\u0133\5f\64\2\u012d")
         buf.write("\u0133\5h\65\2\u012e\u0133\5j\66\2\u012f\u0133\5l\67\2")
         buf.write("\u0130\u0133\5n8\2\u0131\u0133\5Z.\2\u0132\u012a\3\2\2")
@@ -316,7 +316,7 @@ def serializedATN():
         buf.write("\u0282\3\2\2\2\u0286\u0283\3\2\2\2\u0286\u0284\3\2\2\2")
         buf.write("\u0286\u0285\3\2\2\2\u0287w\3\2\2\2B{\u0085\u008c\u0096")
         buf.write("\u009c\u00a8\u00ad\u00b0\u00ba\u00c1\u00c8\u00d2\u00db")
-        buf.write("\u00e5\u00ee\u00f1\u00f7\u0101\u010a\u0110\u0116\u011f")
+        buf.write("\u00e5\u00ee\u00f1\u00f7\u0101\u010a\u010e\u0117\u011d")
         buf.write("\u0125\u0132\u013b\u0145\u0150\u015b\u0166\u0171\u017c")
         buf.write("\u0182\u0187\u0193\u019d\u01a1\u01a8\u01ad\u01b1\u01ba")
         buf.write("\u01c1\u01ca\u01cd\u01d4\u01de\u01e4\u01ee\u01fb\u0203")
@@ -375,9 +375,9 @@ class BKOOLParser ( Parser ):
     RULE_methodDecl = 14
     RULE_paraList = 15
     RULE_paraInit = 16
-    RULE_constructor = 17
-    RULE_mainMethod = 18
-    RULE_voidMethod = 19
+    RULE_mainMethod = 17
+    RULE_voidMethod = 18
+    RULE_constructor = 19
     RULE_stmt = 20
     RULE_stmt_wo_return = 21
     RULE_exp = 22
@@ -421,8 +421,8 @@ class BKOOLParser ( Parser ):
     ruleNames =  [ "program", "typ", "arrTyp", "classDecl", "className", 
                    "classMem", "attributeDecl", "mutableAttribute", "muInit", 
                    "immutableAttribute", "immuInit", "objAttribute", "objTyp", 
-                   "objInit", "methodDecl", "paraList", "paraInit", "constructor", 
-                   "mainMethod", "voidMethod", "stmt", "stmt_wo_return", 
+                   "objInit", "methodDecl", "paraList", "paraInit", "mainMethod", 
+                   "voidMethod", "constructor", "stmt", "stmt_wo_return", 
                    "exp", "exp1", "exp2", "exp3", "exp4", "exp5", "exp6", 
                    "exp7", "exp8", "exp9", "exp10", "exp11", "atom", "expList", 
                    "expListWithBrackets", "varDecl", "mutableVar", "immutableVar", 
@@ -1733,75 +1733,6 @@ class BKOOLParser ( Parser ):
         return localctx
 
 
-    class ConstructorContext(ParserRuleContext):
-        __slots__ = 'parser'
-
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
-            super().__init__(parent, invokingState)
-            self.parser = parser
-
-        def className(self):
-            return self.getTypedRuleContext(BKOOLParser.ClassNameContext,0)
-
-
-        def LB(self):
-            return self.getToken(BKOOLParser.LB, 0)
-
-        def RB(self):
-            return self.getToken(BKOOLParser.RB, 0)
-
-        def stmtBlock_constructor(self):
-            return self.getTypedRuleContext(BKOOLParser.StmtBlock_constructorContext,0)
-
-
-        def paraList(self):
-            return self.getTypedRuleContext(BKOOLParser.ParaListContext,0)
-
-
-        def getRuleIndex(self):
-            return BKOOLParser.RULE_constructor
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitConstructor" ):
-                return visitor.visitConstructor(self)
-            else:
-                return visitor.visitChildren(self)
-
-
-
-
-    def constructor(self):
-
-        localctx = BKOOLParser.ConstructorContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 34, self.RULE_constructor)
-        self._la = 0 # Token type
-        try:
-            self.enterOuterAlt(localctx, 1)
-            self.state = 267
-            self.className()
-            self.state = 268
-            self.match(BKOOLParser.LB)
-            self.state = 270
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << BKOOLParser.BOOLEAN) | (1 << BKOOLParser.INT) | (1 << BKOOLParser.FLOAT) | (1 << BKOOLParser.STRING) | (1 << BKOOLParser.ID))) != 0):
-                self.state = 269
-                self.paraList()
-
-
-            self.state = 272
-            self.match(BKOOLParser.RB)
-            self.state = 273
-            self.stmtBlock_constructor()
-        except RecognitionException as re:
-            localctx.exception = re
-            self._errHandler.reportError(self, re)
-            self._errHandler.recover(self, re)
-        finally:
-            self.exitRule()
-        return localctx
-
-
     class MainMethodContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -1840,27 +1771,27 @@ class BKOOLParser ( Parser ):
     def mainMethod(self):
 
         localctx = BKOOLParser.MainMethodContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 36, self.RULE_mainMethod)
+        self.enterRule(localctx, 34, self.RULE_mainMethod)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 276
+            self.state = 268
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==BKOOLParser.STATIC:
-                self.state = 275
+                self.state = 267
                 self.match(BKOOLParser.STATIC)
 
 
-            self.state = 278
+            self.state = 270
             self.match(BKOOLParser.VOID)
-            self.state = 279
+            self.state = 271
             self.match(BKOOLParser.T__0)
-            self.state = 280
+            self.state = 272
             self.match(BKOOLParser.LB)
-            self.state = 281
+            self.state = 273
             self.match(BKOOLParser.RB)
-            self.state = 282
+            self.state = 274
             self.stmtBlock_wo_return()
         except RecognitionException as re:
             localctx.exception = re
@@ -1916,22 +1847,91 @@ class BKOOLParser ( Parser ):
     def voidMethod(self):
 
         localctx = BKOOLParser.VoidMethodContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 38, self.RULE_voidMethod)
+        self.enterRule(localctx, 36, self.RULE_voidMethod)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 285
+            self.state = 277
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==BKOOLParser.STATIC:
-                self.state = 284
+                self.state = 276
                 self.match(BKOOLParser.STATIC)
 
 
-            self.state = 287
+            self.state = 279
             self.match(BKOOLParser.VOID)
-            self.state = 288
+            self.state = 280
             self.match(BKOOLParser.ID)
+            self.state = 281
+            self.match(BKOOLParser.LB)
+            self.state = 283
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << BKOOLParser.BOOLEAN) | (1 << BKOOLParser.INT) | (1 << BKOOLParser.FLOAT) | (1 << BKOOLParser.STRING) | (1 << BKOOLParser.ID))) != 0):
+                self.state = 282
+                self.paraList()
+
+
+            self.state = 285
+            self.match(BKOOLParser.RB)
+            self.state = 286
+            self.stmtBlock_wo_return()
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class ConstructorContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def className(self):
+            return self.getTypedRuleContext(BKOOLParser.ClassNameContext,0)
+
+
+        def LB(self):
+            return self.getToken(BKOOLParser.LB, 0)
+
+        def RB(self):
+            return self.getToken(BKOOLParser.RB, 0)
+
+        def stmtBlock_constructor(self):
+            return self.getTypedRuleContext(BKOOLParser.StmtBlock_constructorContext,0)
+
+
+        def paraList(self):
+            return self.getTypedRuleContext(BKOOLParser.ParaListContext,0)
+
+
+        def getRuleIndex(self):
+            return BKOOLParser.RULE_constructor
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitConstructor" ):
+                return visitor.visitConstructor(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+
+    def constructor(self):
+
+        localctx = BKOOLParser.ConstructorContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 38, self.RULE_constructor)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 288
+            self.className()
             self.state = 289
             self.match(BKOOLParser.LB)
             self.state = 291
@@ -1945,7 +1945,7 @@ class BKOOLParser ( Parser ):
             self.state = 293
             self.match(BKOOLParser.RB)
             self.state = 294
-            self.stmtBlock_wo_return()
+            self.stmtBlock_constructor()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)

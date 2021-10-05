@@ -1,1 +1,17 @@
- 
+
+        class Shape 
+        {
+            void main() 
+            {
+                {
+                    {
+                        {
+                            {
+                                evil := bad;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
