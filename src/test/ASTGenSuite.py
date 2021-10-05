@@ -537,7 +537,7 @@ class TestFish {
 		int[3] a = {5.1, 6.2, true};
 	}
 }"""
-        expect = ""
+        expect = "Program([ClassDecl(Id(test),[MethodDecl(Id(foo),Instance,[],IntType,Block([VarDecl(Id(a),ArrayType(IntLit(3),IntType),[FloatLit(5.1),FloatLit(6.2),BooleanLit(True)])],[]))])])"
         self.assertTrue(TestAST.test(input,expect,341))
     
 

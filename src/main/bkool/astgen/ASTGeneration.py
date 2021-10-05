@@ -592,7 +592,7 @@ class ASTGeneration(BKOOLVisitor):
         elif ctx.STRING_LIT():
             return StringLiteral(ctx.STRING_LIT().getText())
         elif ctx.arr_lit():
-            return ArrayLiteral(ctx.arr_lit().accept(self))
+            return ctx.arr_lit().accept(self)
         
 
     def visitBool_lit(self, ctx:BKOOLParser.Bool_litContext):
